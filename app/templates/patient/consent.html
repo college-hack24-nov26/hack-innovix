@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block extra_js %}<script type="module" src="{{ url_for('static', filename='js/voice.js') }}"></script>{% endblock %}
+{% block content %}
+<div class="patient-shell">
+  <h1>{{ _('consent_title') }}</h1>
+  <div class="card" id="consent-text">
+    <ul>
+      <li>Your answers, uploaded files, and access logs are collected.</li>
+      <li>They are used to prepare your history for the clinician.</li>
+      <li>Documents are stored and text is extracted for you to review.</li>
+      <li>You, assigned clinicians, triage staff, and administrators can access records as needed.</li>
+    </ul>
+  </div>
+  <p>
+    <button class="btn btn-ghost" type="button" id="listen-btn">{{ _('listen') }}</button>
+  </p>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="btn btn-primary btn-lg" name="decision" value="give" type="submit">{{ _('give_consent') }}</button>
+    <button class="btn btn-ghost btn-lg" name="decision" value="decline" type="submit">{{ _('decline') }}</button>
+  </form>
+</div>
+<script type="module">
+  import { speak } from "{{ url_for('static', filename='js/voice.js') }}";
+  document.getElementById("listen-btn").addEventListener("click", () => {
+    speak(document.getElementById("consent-text").innerText, "{{ locale }}");
+  });
+</script>
+{% include "components/patient_bottom_nav.html" %}
+{% endblock %}

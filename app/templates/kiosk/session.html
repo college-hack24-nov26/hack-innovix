@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body_class %}kiosk-body{% endblock %}
+{% block content %}
+  <div class="kiosk-wrap">
+    <h1>{{ _('start_session') }}</h1>
+    {% if patient %}
+      <div class="kiosk-actions">
+        <a class="btn btn-primary btn-lg" href="{{ url_for('patient.consent') }}">Consent</a>
+        <a class="btn btn-primary btn-lg" href="{{ url_for('patient.interview') }}">Interview</a>
+        <a class="btn btn-primary btn-lg" href="{{ url_for('patient.documents') }}">Documents</a>
+        <a class="btn btn-primary btn-lg" href="{{ url_for('patient.review') }}">Review</a>
+      </div>
+    {% endif %}
+    <p><a class="btn btn-ghost btn-lg" href="{{ url_for('kiosk.kiosk') }}">{{ _('start_new_patient') }}</a></p>
+  </div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="patient-shell">
+  <h1>Timeline</h1>
+  <div class="filter-row">
+    <button class="chip" type="button" data-filter="all">All</button>
+    <button class="chip" type="button" data-filter="Prescription">Prescription</button>
+    <button class="chip" type="button" data-filter="Laboratory">Laboratory</button>
+    <button class="chip" type="button" data-filter="Diagnosis">Diagnosis</button>
+  </div>
+  <div class="timeline">
+    {% for item in items %}
+      <div class="timeline-item" data-type="{{ item.type }}">
+        <strong>{{ item.date or "Date not available" }}</strong>
+        <div>{{ item.type }} · {{ item.title }}</div>
+        <div>{{ item.details }}</div>
+        <small>Source: {{ item.source or "Not available" }}</small>
+      </div>
+    {% else %}
+      <p class="empty">No events yet. Upload reports or complete history.</p>
+    {% endfor %}
+  </div>
+</div>
+{% include "components/patient_bottom_nav.html" %}
+<script>
+  document.querySelectorAll("[data-filter]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const f = btn.dataset.filter;
+      document.querySelectorAll(".timeline-item").forEach((el) => {
+        el.style.display = (f === "all" || (el.dataset.type || "").toLowerCase().includes(f.toLowerCase())) ? "" : "none";
+      });
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>{{ _('app_name') }}</h1>
+    <p><strong>{{ _('tagline') }}</strong></p>
+    <p>{{ _('subtitle') }}</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary btn-lg" href="{{ url_for('auth.register') }}">{{ _('start_intake') }}</a>
+      <a class="btn btn-ghost btn-lg" href="{{ url_for('auth.login') }}">{{ _('doctor_login') }}</a>
+    </div>
+  </div>
+  <div class="hero-panel">
+    <h3>How a visit starts</h3>
+    <ol>
+      <li>Consent</li>
+      <li>Clinical interview</li>
+      <li>Reports and timeline</li>
+      <li>Physician review</li>
+    </ol>
+  </div>
+</section>
+<section class="section">
+  <h2>Capabilities</h2>
+  <div class="grid grid-3">
+    <article class="card feature-card"><div class="feature-icon">01</div><h3>{{ _('feature_interview') }}</h3><p>Adaptive history in a guided interview.</p></article>
+    <article class="card feature-card"><div class="feature-icon">02</div><h3>{{ _('feature_voice') }}</h3><p>Speak or type in English, Hindi, or Marathi.</p></article>
+    <article class="card feature-card"><div class="feature-icon">03</div><h3>{{ _('feature_ocr') }}</h3><p>Digitise prescriptions and lab reports.</p></article>
+    <article class="card feature-card"><div class="feature-icon">04</div><h3>{{ _('feature_timeline') }}</h3><p>One timeline for events, medicines, and labs.</p></article>
+    <article class="card feature-card"><div class="feature-icon">05</div><h3>{{ _('feature_redflag') }}</h3><p>Priority alerts for urgent symptom patterns.</p></article>
+    <article class="card feature-card"><div class="feature-icon">06</div><h3>{{ _('feature_verify') }}</h3><p>Clinicians edit and confirm every draft.</p></article>
+    <article class="card feature-card"><div class="feature-icon">07</div><h3>{{ _('feature_abdm') }}</h3><p>FHIR export and health-record interchange.</p></article>
+  </div>
+</section>
+{% endblock %}

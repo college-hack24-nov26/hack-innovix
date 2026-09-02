@@ -1,0 +1,25 @@
+{% extends "staff/_shell.html" %}
+{% block staff %}
+<h1>Users</h1>
+<form method="post" class="form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input name="full_name" placeholder="Name" required>
+  <input name="email" type="email" placeholder="Email" required>
+  <input name="password" type="password" placeholder="Password" required>
+  <select name="role">
+    <option value="doctor">doctor</option>
+    <option value="triage">triage</option>
+    <option value="admin">admin</option>
+    <option value="patient">patient</option>
+  </select>
+  <button class="btn btn-primary" type="submit">Create</button>
+</form>
+<table class="dense">
+  <thead><tr><th>Name</th><th>Email</th><th>Role</th></tr></thead>
+  <tbody>
+    {% for u in users %}
+      <tr><td>{{ u.full_name }}</td><td>{{ u.email }}</td><td>{{ u.role }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

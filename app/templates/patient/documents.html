@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block extra_js %}<script type="module" src="{{ url_for('static', filename='js/documents.js') }}"></script>{% endblock %}
+{% block content %}
+<div class="patient-shell">
+  <h1>{{ _('upload_reports') }}</h1>
+  <div class="card" id="dropzone">
+    <p>Drop a PDF, JPG, or PNG, or choose a file.</p>
+    <input id="file-input" type="file" accept=".pdf,.jpg,.jpeg,.png,image/*" capture="environment" aria-label="Choose file">
+    <progress id="upload-progress" max="100" value="0" hidden></progress>
+  </div>
+  {% for doc in documents %}
+    <article class="card">
+      <h3>{{ doc.filename }}</h3>
+      <p>{{ doc.category }} · {{ doc.status }}</p>
+      <form method="post" action="{{ url_for('documents.confirm_extraction', doc_id=doc.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {% for ext in doc.extractions %}
+          <label>{{ ext.field_name }} <input name="field_{{ ext.id }}" value="{{ ext.field_value }}"></label>
+        {% else %}
+          <p>Processing…</p>
+        {% endfor %}
+        <button class="btn btn-primary" type="submit">Confirm</button>
+      </form>
+    </article>
+  {% else %}
+    <p class="empty">No documents yet.</p>
+  {% endfor %}
+</div>
+{% include "components/patient_bottom_nav.html" %}
+{% endblock %}

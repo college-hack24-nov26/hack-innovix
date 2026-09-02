@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block extra_js %}
+<script type="module" src="{{ url_for('static', filename='js/interview.js') }}"></script>
+{% endblock %}
+{% block content %}
+<div class="patient-shell">
+  <article class="card interview-card" id="interview-root" data-session-id="{{ session.id }}" data-lang="{{ locale }}">
+    <h1>{{ _('app_name') }}</h1>
+    <p id="q-section"></p>
+    <div class="progress-wrap"><div id="q-progress" class="progress-bar" style="width:0"></div></div>
+    <h2 id="q-prompt"></h2>
+    <div class="voice-row">
+      <button class="mic" id="mic-btn" type="button" aria-label="{{ _('speak') }}">🎤</button>
+      <button class="btn btn-ghost" id="speak-btn" type="button" aria-label="Read question">Listen</button>
+    </div>
+    <p id="voice-hint" hidden>{{ _('voice_unavailable') }}</p>
+    <label class="sr-only" for="q-input">{{ _('type_answer') }}</label>
+    <textarea id="q-input" rows="3" placeholder="{{ _('type_answer') }}"></textarea>
+    <p>{{ _('or') }}</p>
+    <div id="q-chips" class="chips"></div>
+    <p id="q-counter"></p>
+    <div id="emergency-banner" class="flash flash-danger" hidden data-default="{{ _('emergency_notice') }}"></div>
+    <button class="btn btn-primary btn-lg" id="next-btn" type="button">Continue</button>
+  </article>
+</div>
+{% include "components/patient_bottom_nav.html" %}
+{% endblock %}

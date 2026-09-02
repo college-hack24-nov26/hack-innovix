@@ -1,0 +1,9 @@
+{% extends "staff/_shell.html" %}
+{% block staff %}
+<h1>Settings</h1>
+<div class="card">
+  <p>AI: {{ cfg.ai_provider }}</p>
+  <p>OCR: {{ cfg.ocr_provider }}</p>
+  <p>Consent version: {{ cfg.consent_version }}</p>
+</div>
+{% endblock %}

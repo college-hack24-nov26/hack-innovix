@@ -1,0 +1,28 @@
+{% extends "staff/_shell.html" %}
+{% block extra_staff_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+{% endblock %}
+{% block staff %}
+<h1>Analytics</h1>
+<div class="stat-grid">
+  <div class="card">OCR success<div class="stat">{{ stats.ocr_rate }}%</div></div>
+  <div class="card">Verification rate<div class="stat">{{ stats.verify_rate }}%</div></div>
+  <div class="card">Completed sessions<div class="stat">{{ stats.completed }}</div></div>
+</div>
+<canvas id="analyticsChart" height="90"></canvas>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const ctx = document.getElementById("analyticsChart");
+    new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: ["Verified summaries", "Other summaries", "Documents", "Alerts"],
+        datasets: [{
+          data: [{{ stats.verified }}, {{ stats.summaries - stats.verified }}, {{ stats.documents }}, {{ stats.alerts }}],
+          backgroundColor: ["#185fa5", "#9fb3c8", "#1d9a8a", "#b54708"]
+        }]
+      }
+    });
+  });
+</script>
+{% endblock %}

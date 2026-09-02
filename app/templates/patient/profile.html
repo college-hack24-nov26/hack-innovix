@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/patient.css') }}">{% endblock %}
+{% block extra_js %}<script type="module" src="{{ url_for('static', filename='js/patient.js') }}"></script>{% endblock %}
+{% block content %}
+<div class="patient-shell">
+  <h1>Profile</h1>
+  <form method="post" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <p>{{ patient.full_name }} · {{ patient.age or "Age not reported" }} · {{ patient.gender }}</p>
+    <p>Hospital ID: {{ patient.hospital_patient_id or "Not available" }}</p>
+    <p>ABHA ID: {{ patient.abha_id or "Not available" }}</p>
+    <label>Department <input name="department" value="{{ patient.department or '' }}"></label>
+    <label><input type="checkbox" name="ayush_mode" id="ayush-toggle" {% if patient.ayush_mode %}checked{% endif %}> AYUSH History</label>
+    <button class="btn btn-primary" type="submit">Save</button>
+  </form>
+</div>
+{% include "components/patient_bottom_nav.html" %}
+{% endblock %}

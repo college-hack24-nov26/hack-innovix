@@ -1,0 +1,18 @@
+{% extends "doctor/_shell.html" %}
+{% block staff %}
+<h1>Patient queue</h1>
+<table class="dense">
+  <thead><tr><th>Patient</th><th>Complaint</th><th>Progress</th><th>Priority</th><th></th></tr></thead>
+  <tbody>
+    {% for s in sessions %}
+      <tr>
+        <td>{{ s.patient.full_name }}</td>
+        <td>{{ s.chief_complaint or "Not reported" }}</td>
+        <td>{{ s.completion_percentage }}%</td>
+        <td>{{ s.red_flag_level }}</td>
+        <td><a href="{{ url_for('doctor.patient_view', patient_id=s.patient_id) }}">Open</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

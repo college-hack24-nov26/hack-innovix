@@ -1,0 +1,108 @@
+{% extends "doctor/_shell.html" %}
+{% block staff %}
+<header class="patient-header card">
+  <div>
+    <h1>{{ patient.full_name }}</h1>
+    <p>Age {{ patient.age or "Not reported" }} · {{ patient.gender or "Not reported" }} · Patient ID {{ patient.id }}</p>
+    <p>ABHA {{ patient.abha_id or "Not available" }} · Dept {{ patient.department }} · Language {{ patient.language }}</p>
+  </div>
+  <div>
+    <button class="btn btn-ghost" data-fhir="{{ patient.id }}" type="button">FHIR export</button>
+  </div>
+</header>
+<nav class="tabs">
+  <a class="{% if tab=='overview' %}active{% endif %}" href="{{ url_for('doctor.patient_view', patient_id=patient.id) }}">Overview</a>
+  <a class="{% if tab=='history' %}active{% endif %}" href="{{ url_for('doctor.history', patient_id=patient.id) }}">History</a>
+  <a class="{% if tab=='documents' %}active{% endif %}" href="{{ url_for('doctor.documents', patient_id=patient.id) }}">Documents</a>
+  <a class="{% if tab=='timeline' %}active{% endif %}" href="{{ url_for('doctor.timeline', patient_id=patient.id) }}">Timeline</a>
+  <a class="{% if tab=='review' %}active{% endif %}" href="{{ url_for('doctor.review', patient_id=patient.id) }}">AI Summary</a>
+  <a class="{% if tab=='notes' %}active{% endif %}" href="{{ url_for('doctor.notes', patient_id=patient.id) }}">{{ _('nav_notes') }}</a>
+  <a class="{% if tab=='audit' %}active{% endif %}" href="{{ url_for('doctor.patient_audit', patient_id=patient.id) }}">{{ _('nav_audit') }}</a>
+</nav>
+
+{% if tab == 'overview' %}
+  <div class="grid grid-3">
+    <div class="card">Open alerts: {{ alerts|length if alerts is defined else 0 }}</div>
+    <div class="card">Documents: {{ documents|length }}</div>
+    <div class="card">AYUSH mode: {{ "Yes" if patient.ayush_mode else "No" }}</div>
+  </div>
+{% elif tab == 'history' %}
+  <div class="card">
+    {% if session %}
+      {% for a in session.answers %}
+        <p><strong>{{ a.section }} / {{ a.question_key }}:</strong> {{ a.value or "Not reported" }}</p>
+      {% endfor %}
+    {% else %}Not available{% endif %}
+  </div>
+{% elif tab == 'documents' %}
+  {% for d in documents %}
+    <article class="card">
+      <h3>{{ d.filename }}</h3>
+      <p>{{ d.category }}</p>
+      {% for e in d.extractions %}
+        <p>{{ e.field_name }}: {{ e.field_value }}
+          {% if d.id %}<a href="{{ url_for('documents.uploaded_file', filename=d.stored_path.split('\\')[-1].split('/')[-1]) }}">Source document</a>{% endif %}
+        </p>
+      {% endfor %}
+    </article>
+  {% else %}<p class="empty">No documents</p>{% endfor %}
+{% elif tab == 'timeline' %}
+  <div class="timeline">
+    {% for item in items %}
+      <div class="timeline-item">
+        <strong>{{ item.date }}</strong> {{ item.title }}
+        <div>{{ item.details }}</div>
+        <small>Source: {{ item.source }}</small>
+      </div>
+    {% endfor %}
+  </div>
+  {% for lab in patient.lab_results %}
+    <div class="lab card">
+      <div>
+        <strong>{{ lab.test_name }}</strong>
+        <div>{{ lab.result_value }} {{ lab.unit }}</div>
+        <div>Reference: {{ lab.reference_range or "Reference range unavailable." }}</div>
+      </div>
+      <div>{{ lab.status_label }}</div>
+    </div>
+  {% endfor %}
+{% elif tab == 'review' %}
+  <p class="disclaimer">{{ _('ai_draft') }}</p>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    {% if summary %}
+      {% for k, v in summary.content_json.items() %}
+        <label>{{ k }}<textarea name="{{ k }}" rows="2">{{ v }}</textarea></label>
+      {% endfor %}
+      <label>Doctor notes <textarea name="notes"></textarea></label>
+      <button class="btn btn-ghost" name="action" value="save">Save Draft</button>
+      <button class="btn btn-primary" name="action" value="confirm">Confirm</button>
+      <button class="btn btn-danger" name="action" value="reject">Reject</button>
+    {% else %}
+      <button class="btn btn-primary" name="action" value="generate">Generate draft summary</button>
+    {% endif %}
+  </form>
+{% elif tab == 'notes' %}
+  <form method="post" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Clinical notes<textarea name="notes" rows="4"></textarea></label>
+    <button class="btn btn-primary" type="submit">Save note</button>
+  </form>
+  {% for r in reviews or [] %}
+    <article class="card"><p>{{ r.notes }}</p><small>{{ r.created_at }} · {{ r.decision }}</small></article>
+  {% else %}
+    <p class="empty">No notes yet.</p>
+  {% endfor %}
+{% elif tab == 'audit' %}
+  <table class="dense">
+    <thead><tr><th>Time</th><th>Action</th><th>Resource</th></tr></thead>
+    <tbody>
+      {% for log in logs or [] %}
+        <tr><td>{{ log.created_at }}</td><td>{{ log.action }}</td><td>{{ log.resource_type }}</td></tr>
+      {% else %}
+        <tr><td colspan="3" class="empty">No audit entries for this patient.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+{% endblock %}

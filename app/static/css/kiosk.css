@@ -1,0 +1,8 @@
+.kiosk-body { background: linear-gradient(180deg, #fff 0%, #f0f4f8 100%); }
+.kiosk-wrap { max-width: 720px; margin: 0 auto; padding: 2.2rem 1rem 5rem; }
+.kiosk-wrap h1 { font-size: 2.3rem; letter-spacing: -0.04em; }
+.kiosk-actions { display: grid; gap: 0.85rem; margin-top: 1.6rem; }
+.kiosk-actions .btn { min-height: 64px; font-size: 1.15rem; }
+.timeout-bar { position: fixed; top: 0; left: 0; height: 5px; background: var(--mk-accent); width: 100%; transform-origin: left; z-index: 40; }
+.kiosk-steps { margin-top: 1.5rem; }
+.kiosk-steps li { margin: 0.4rem 0; }

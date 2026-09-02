@@ -1,0 +1,21 @@
+.patient-shell { max-width: 860px; margin: 0 auto; padding: 1.4rem 1.2rem 5.5rem; }
+.welcome { font-size: clamp(1.7rem, 4vw, 2.4rem); margin-bottom: 0.35rem; letter-spacing: -0.03em; }
+.progress-wrap { background: #e2e8f0; border-radius: 999px; height: 10px; overflow: hidden; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--mk-primary), var(--mk-accent)); }
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.6rem; }
+.action-card {
+  min-height: 132px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; font-size: 1.08rem; font-weight: 750; text-decoration: none; color: var(--mk-navy);
+  border-bottom: 4px solid var(--mk-accent);
+}
+.interview-card { max-width: 640px; margin: 0.5rem auto; padding: 1.7rem; }
+.interview-card h1 { font-size: 1.15rem; color: var(--mk-muted); font-weight: 700; margin: 0 0 0.4rem; }
+.interview-card h2 { font-size: 1.45rem; letter-spacing: -0.03em; }
+.voice-row { display: flex; gap: 0.7rem; align-items: center; margin: 1rem 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.8rem; }
+.chip { min-height: 46px; padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid var(--mk-border); background: #fff; font-weight: 650; cursor: pointer; font-family: inherit; }
+.chip:hover { border-color: var(--mk-primary); background: #f0fdfa; }
+.mic { width: 64px; height: 64px; border-radius: 50%; border: 0; background: var(--mk-primary); color: #fff; font-size: 1.45rem; cursor: pointer; }
+.mic.listening { animation: pulse 1s infinite; background: var(--mk-danger); }
+@keyframes pulse { 50% { transform: scale(1.08); } }
+@media (max-width: 768px) { .action-grid { grid-template-columns: 1fr; } }

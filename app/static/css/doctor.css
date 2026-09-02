@@ -1,0 +1,7 @@
+.tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 1rem 0; }
+.tabs a { padding: 0.5rem 0.9rem; border-radius: 999px; text-decoration: none; background: #fff; border: 1px solid var(--mk-border); color: #334155; font-weight: 650; font-size: 0.9rem; }
+.tabs a.active { background: var(--mk-primary); color: #fff; border-color: var(--mk-primary); }
+.patient-header { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
+.patient-header h1 { margin: 0 0 0.35rem; }
+.patient-header p { margin: 0.15rem 0; color: var(--mk-muted); }
+.disclaimer { background: #ecfeff; border: 1px solid #99f6e4; color: #115e59; padding: 0.7rem 1rem; border-radius: 12px; font-size: 0.92rem; }

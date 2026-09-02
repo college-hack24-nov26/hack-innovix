@@ -1,0 +1,30 @@
+{% extends "staff/_shell.html" %}
+{% block extra_staff_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+{% endblock %}
+{% block staff %}
+<h1>Admin dashboard</h1>
+<div class="stat-grid">
+  <div class="card">Total Patients<div class="stat">{{ stats.patients }}</div></div>
+  <div class="card">Today's intake sessions<div class="stat">{{ stats.sessions }}</div></div>
+  <div class="card">Completed<div class="stat">{{ stats.completed }}</div></div>
+  <div class="card">Documents processed<div class="stat">{{ stats.documents }}</div></div>
+  <div class="card">OCR success rate<div class="stat">{{ stats.ocr_rate }}%</div></div>
+  <div class="card">AI summaries<div class="stat">{{ stats.summaries }}</div></div>
+  <div class="card">Red flag alerts<div class="stat">{{ stats.alerts }}</div></div>
+  <div class="card">Doctor verification rate<div class="stat">{{ stats.verify_rate }}%</div></div>
+</div>
+<canvas id="adminChart" height="80"></canvas>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const ctx = document.getElementById("adminChart");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Patients", "Sessions", "Docs", "Summaries", "Alerts"],
+        datasets: [{ label: "Counts", data: [{{ stats.patients }}, {{ stats.sessions }}, {{ stats.documents }}, {{ stats.summaries }}, {{ stats.alerts }}], backgroundColor: "#185fa5" }]
+      }
+    });
+  });
+</script>
+{% endblock %}
