@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block extra_js %}<script type="module" src="{{ url_for('static', filename='js/patient.js') }}"></script>{% endblock %}
+{% block content %}
+<div class="patient-shell">
+  <h1 class="welcome">{{ _('welcome', name=patient.full_name) }}</h1>
+  <p>{{ _('clinical_intake') }} · {{ progress }}%</p>
+  <div class="progress-wrap" aria-label="Progress"><div class="progress-bar" style="width: {{ progress }}%"></div></div>
+  <div class="action-grid">
+    <a class="card action-card" href="{{ url_for('patient.interview') }}">{{ _('complete_history') }}</a>
+    <a class="card action-card" href="{{ url_for('patient.documents') }}">{{ _('upload_reports') }}</a>
+    <a class="card action-card" href="{{ url_for('patient.review') }}">{{ _('review_information') }}</a>
+    <a class="card action-card" href="{{ url_for('patient.timeline') }}">{{ _('view_timeline') }}</a>
+  </div>
+</div>
+{% include "components/patient_bottom_nav.html" %}
+{% endblock %}

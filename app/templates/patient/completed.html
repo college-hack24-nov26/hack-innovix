@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="patient-shell">
+  <h1>Thank you</h1>
+  <p>Your information is with the care team. Please wait to be called.</p>
+  <a class="btn btn-primary" href="{{ url_for('patient.dashboard') }}">{{ _('nav_home') }}</a>
+</div>
+{% include "components/patient_bottom_nav.html" %}
+{% endblock %}

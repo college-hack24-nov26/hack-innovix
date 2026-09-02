@@ -1,0 +1,27 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://medikiosk:medikiosk@db:5432/medikiosk
+      SECRET_KEY: change-me
+      AI_PROVIDER: mock
+      OCR_PROVIDER: mock
+      DEMO_MODE: "true"
+    depends_on:
+      - db
+    volumes:
+      - ./uploads:/app/uploads
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: medikiosk
+      POSTGRES_PASSWORD: medikiosk
+      POSTGRES_DB: medikiosk
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

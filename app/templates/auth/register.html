@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-card" style="max-width:480px">
+    <h1>{{ _('register') }}</h1>
+    <form method="post" class="form">
+      {{ form.hidden_tag() }}
+      <label>{{ form.first_name.label }} {{ form.first_name() }}</label>
+      <label>{{ form.last_name.label }} {{ form.last_name() }}</label>
+      <label>{{ form.email.label }} {{ form.email() }}</label>
+      <label>{{ form.password.label }} {{ form.password() }}</label>
+      <label>{{ form.confirm.label }} {{ form.confirm() }}</label>
+      <label>{{ form.age.label }} {{ form.age() }}</label>
+      <label>{{ form.gender.label }} {{ form.gender() }}</label>
+      <label>{{ form.language.label }} {{ form.language() }}</label>
+      <label>{{ form.id_type.label }} {{ form.id_type() }}</label>
+      <label>{{ form.id_value.label }} {{ form.id_value() }}</label>
+      <button class="btn btn-primary" type="submit">{{ _('register') }}</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

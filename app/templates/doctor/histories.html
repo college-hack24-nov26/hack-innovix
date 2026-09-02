@@ -1,0 +1,20 @@
+{% extends "doctor/_shell.html" %}
+{% block staff %}
+<h1>Clinical histories</h1>
+<table class="dense">
+  <thead><tr><th>Patient</th><th>Complaint</th><th>Progress</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+    {% for s in sessions %}
+      <tr>
+        <td>{{ s.patient.full_name }}</td>
+        <td>{{ s.chief_complaint or "Not reported" }}</td>
+        <td>{{ s.completion_percentage }}%</td>
+        <td>{{ s.status }}</td>
+        <td><a href="{{ url_for('doctor.history', patient_id=s.patient_id) }}">Open</a></td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="empty">No histories yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

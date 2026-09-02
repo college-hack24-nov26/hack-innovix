@@ -1,0 +1,12 @@
+{% extends "doctor/_shell.html" %}
+{% block staff %}
+<h1>Dashboard</h1>
+<div class="stat-grid">
+  <div class="card"><div>Today's Patients</div><div class="stat">{{ patients_today }}</div></div>
+  <div class="card"><div>Histories Completed</div><div class="stat">{{ completed }}</div></div>
+  <div class="card"><div>Pending Reviews</div><div class="stat">{{ pending }}</div></div>
+  <div class="card"><div>Red Flag Alerts</div><div class="stat">{{ alerts }}</div></div>
+  <div class="card"><div>Average Intake Time</div><div class="stat">{{ avg_intake }}</div></div>
+  <div class="card"><div>Documents Processed</div><div class="stat">{{ docs }}</div></div>
+</div>
+{% endblock %}

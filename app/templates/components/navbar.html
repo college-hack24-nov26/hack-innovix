@@ -1,0 +1,30 @@
+<header class="navbar" role="banner">
+  <div class="navbar-inner">
+    <a class="brand" href="{{ url_for('main.index') }}">
+      <span class="brand-mark" aria-hidden="true">+</span>
+      {{ _('app_name') }}
+    </a>
+    <button class="btn btn-ghost nav-toggle" data-menu type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">Menu</button>
+    <nav class="nav-links" id="site-nav" aria-label="{{ _('nav_main') }}">
+      <a class="nav-home{% if request.endpoint == 'main.index' %} is-active{% endif %}" href="{{ url_for('main.index') }}">{{ _('nav_home') }}</a>
+      {% if current_user.is_authenticated %}
+        <a class="{% if request.endpoint and request.endpoint.endswith('.dashboard') %}is-active{% endif %}" href="{{ dashboard_url }}">{{ _('nav_dashboard') }}</a>
+      {% endif %}
+      <a class="{% if request.endpoint == 'main.about' %}is-active{% endif %}" href="{{ url_for('main.about') }}">{{ _('about') }}</a>
+      <a class="{% if request.endpoint == 'main.help_page' %}is-active{% endif %}" href="{{ url_for('main.help_page') }}">{{ _('help') }}</a>
+      <a class="{% if request.endpoint and request.endpoint.startswith('kiosk.') %}is-active{% endif %}" href="{{ url_for('kiosk.kiosk') }}">{{ _('nav_kiosk') }}</a>
+      <div class="lang-switch" aria-label="{{ _('select_language') }}">
+        <a href="{{ url_for('auth.set_language', code='en') }}" {% if locale == 'en' %}aria-current="true"{% endif %}>EN</a>
+        <a href="{{ url_for('auth.set_language', code='hi') }}" {% if locale == 'hi' %}aria-current="true"{% endif %}>HI</a>
+        <a href="{{ url_for('auth.set_language', code='mr') }}" {% if locale == 'mr' %}aria-current="true"{% endif %}>MR</a>
+      </div>
+      {% if current_user.is_authenticated %}
+        <span class="nav-user">{{ current_user.full_name }}</span>
+        <a href="{{ url_for('auth.logout') }}">{{ _('logout') }}</a>
+      {% else %}
+        <a class="{% if request.endpoint == 'auth.login' %}is-active{% endif %}" href="{{ url_for('auth.login') }}">{{ _('login') }}</a>
+        <a class="btn btn-primary nav-cta" href="{{ url_for('auth.register') }}">{{ _('register') }}</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="patient-shell">
+  <h1>{{ _('review_information') }}</h1>
+  {% if session and session.red_flag_level == 'EMERGENCY' %}
+    <div class="flash flash-danger">{{ _('emergency_notice') }}</div>
+  {% endif %}
+  <ul>
+    {% for a in answers %}
+      <li><strong>{{ a.question_key }}:</strong> {{ a.value or "Not reported" }}</li>
+    {% else %}
+      <li>Not reported</li>
+    {% endfor %}
+  </ul>
+  <form method="post" action="{{ url_for('patient.submit') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="btn btn-primary btn-lg" type="submit">Submit information</button>
+  </form>
+</div>
+{% include "components/patient_bottom_nav.html" %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "doctor/_shell.html" %}
+{% block staff %}
+<h1>Patients</h1>
+<input id="patient-search" placeholder="Search name, hospital ID, ABHA" value="{{ q or '' }}" aria-label="Search patients">
+<table class="dense">
+  <thead><tr><th>Name</th><th>Age</th><th>Hospital ID</th><th>ABHA</th><th></th></tr></thead>
+  <tbody>
+    {% for p in patients %}
+      <tr>
+        <td>{{ p.full_name }}</td>
+        <td>{{ p.age or "Not reported" }}</td>
+        <td>{{ p.hospital_patient_id or "Not available" }}</td>
+        <td>{{ p.abha_id or "Not available" }}</td>
+        <td><a href="{{ url_for('doctor.patient_view', patient_id=p.id) }}">Open</a></td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="empty">No patients found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

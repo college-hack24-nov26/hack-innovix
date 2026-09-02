@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block extra_css %}{% endblock %}
+{% block body_class %}kiosk-body{% endblock %}
+{% block content %}
+  <div class="timeout-bar" id="timeout-bar"></div>
+  <div class="kiosk-wrap">
+    <h1>{{ _('app_name') }}</h1>
+    <p>{{ _('tagline') }}</p>
+    <div class="kiosk-actions">
+      <a class="btn btn-primary" href="{{ url_for('auth.register') }}">{{ _('start_session') }}</a>
+      <a class="btn btn-ghost" href="{{ url_for('auth.login') }}">Identify patient</a>
+      <a class="btn btn-ghost" href="{{ url_for('kiosk.kiosk') }}">{{ _('start_new_patient') }}</a>
+    </div>
+    <ol class="card kiosk-steps">
+      <li>Language</li>
+      <li>Identification</li>
+      <li>Consent</li>
+      <li>Interview</li>
+      <li>Documents</li>
+      <li>Review</li>
+    </ol>
+  </div>
+{% endblock %}
+{% block extra_js %}
+  <script>
+    const seconds = {{ config.SESSION_TIMEOUT_SECONDS if config is defined else 300 }};
+    const bar = document.getElementById("timeout-bar");
+    const start = Date.now();
+    const timer = setInterval(() => {
+      const used = (Date.now() - start) / 1000;
+      bar.style.transform = `scaleX(${Math.max(0, 1 - used / seconds)})`;
+      if (used >= seconds) {
+        clearInterval(timer);
+        window.location.href = "{{ url_for('kiosk.kiosk') }}";
+      }
+    }, 1000);
+  </script>
+{% endblock %}

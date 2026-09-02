@@ -1,0 +1,21 @@
+<nav class="sidebar-nav" aria-label="Staff">
+  <a href="{{ url_for('main.index') }}">{{ _('nav_home') }}</a>
+  {% if current_user.role in ('doctor', 'admin') %}
+    <a href="{{ url_for('doctor.dashboard') }}" class="{% if request.endpoint == 'doctor.dashboard' %}active{% endif %}">{{ _('nav_dashboard') }}</a>
+    <a href="{{ url_for('doctor.queue') }}" class="{% if request.endpoint == 'doctor.queue' %}active{% endif %}">{{ _('nav_queue') }}</a>
+    <a href="{{ url_for('doctor.patients') }}" class="{% if request.endpoint == 'doctor.patients' %}active{% endif %}">{{ _('nav_patients') }}</a>
+    <a href="{{ url_for('triage.alerts') }}" class="{% if request.endpoint == 'triage.alerts' %}active{% endif %}">{{ _('nav_alerts') }}</a>
+    <a href="{{ url_for('doctor.all_documents') }}" class="{% if request.endpoint == 'doctor.all_documents' %}active{% endif %}">{{ _('nav_documents') }}</a>
+    <a href="{{ url_for('doctor.histories') }}" class="{% if request.endpoint == 'doctor.histories' %}active{% endif %}">{{ _('nav_histories') }}</a>
+  {% endif %}
+  {% if current_user.role in ('triage', 'admin', 'doctor') %}
+    <a href="{{ url_for('triage.dashboard') }}" class="{% if request.endpoint == 'triage.dashboard' %}active{% endif %}">{{ _('nav_triage') }}</a>
+  {% endif %}
+  {% if current_user.role == 'admin' %}
+    <a href="{{ url_for('admin.dashboard') }}" class="{% if request.endpoint == 'admin.dashboard' %}active{% endif %}">{{ _('nav_admin') }}</a>
+    <a href="{{ url_for('admin.users') }}" class="{% if request.endpoint == 'admin.users' %}active{% endif %}">{{ _('nav_users') }}</a>
+    <a href="{{ url_for('admin.analytics') }}" class="{% if request.endpoint == 'admin.analytics' %}active{% endif %}">{{ _('nav_reports') }}</a>
+    <a href="{{ url_for('admin.audit') }}" class="{% if request.endpoint == 'admin.audit' %}active{% endif %}">{{ _('nav_audit') }}</a>
+    <a href="{{ url_for('admin.settings') }}" class="{% if request.endpoint == 'admin.settings' %}active{% endif %}">{{ _('nav_settings') }}</a>
+  {% endif %}
+</nav>

@@ -1,0 +1,27 @@
+{% extends "staff/_shell.html" %}
+{% block extra_staff_js %}<script type="module" src="{{ url_for('static', filename='js/triage.js') }}"></script>{% endblock %}
+{% block staff %}
+<h1>Alerts</h1>
+<table class="dense">
+  <thead><tr><th>Patient</th><th>Age</th><th>Complaint</th><th>Alert</th><th>Severity</th><th>Time</th><th>Status</th><th></th></tr></thead>
+  <tbody id="alert-body">
+    {% for a in alerts %}
+      <tr>
+        <td>{{ a.patient.full_name }}</td>
+        <td>{{ a.patient.age }}</td>
+        <td>{{ a.complaint }}</td>
+        <td>{{ a.message }}</td>
+        <td>{{ a.severity }}</td>
+        <td>{{ a.created_at }}</td>
+        <td>{{ a.status }}</td>
+        <td>
+          <form method="post" action="{{ url_for('triage.acknowledge', alert_id=a.id) }}" style="display:inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-ghost" type="submit">Acknowledge</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

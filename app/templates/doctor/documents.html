@@ -1,0 +1,13 @@
+{% extends "doctor/_shell.html" %}
+{% block staff %}
+<h1>Documents</h1>
+{% for d in documents %}
+  <article class="card">
+    <h3>{{ d.filename }}</h3>
+    <p>{{ d.category }} · {{ d.status }} · Patient {{ d.patient.full_name if d.patient else d.patient_id }}</p>
+    <a href="{{ url_for('doctor.documents', patient_id=d.patient_id) }}">Open patient documents</a>
+  </article>
+{% else %}
+  <p class="empty">No documents processed yet.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block body_class %}staff-ui{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/doctor.css') }}">{% endblock %}
+{% block extra_js %}
+<script type="module" src="{{ url_for('static', filename='js/doctor.js') }}"></script>
+{% block extra_staff_js %}{% endblock %}
+{% endblock %}
+{% block content %}
+<div class="layout">
+  <aside class="sidebar" aria-label="Clinical navigation">
+    {% include "components/staff_sidebar.html" %}
+  </aside>
+  <div class="main">{% block staff %}{% endblock %}</div>
+</div>
+<nav class="bottom-nav">
+  <a href="{{ url_for('main.index') }}">{{ _('nav_home') }}</a>
+  <a href="{{ dashboard_url }}">{{ _('nav_dashboard') }}</a>
+  {% if current_user.role in ('doctor', 'admin') %}
+    <a href="{{ url_for('doctor.queue') }}">{{ _('nav_queue') }}</a>
+    <a href="{{ url_for('doctor.patients') }}">{{ _('nav_patients') }}</a>
+  {% endif %}
+  <a href="{{ url_for('triage.alerts') }}">{{ _('nav_alerts') }}</a>
+</nav>
+{% endblock %}

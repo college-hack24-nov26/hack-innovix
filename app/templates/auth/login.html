@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-card">
+    <h1>{{ _('login') }}</h1>
+    <form method="post" class="form">
+      {{ form.hidden_tag() }}
+      <label>{{ form.email.label }} {{ form.email() }}</label>
+      <label>{{ form.password.label }} {{ form.password() }}</label>
+      <button class="btn btn-primary" type="submit">{{ _('login') }}</button>
+    </form>
+    <p><a href="{{ url_for('auth.register') }}">{{ _('register') }}</a></p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="{{ locale }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ _('app_name') }}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/patient.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/doctor.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/kiosk.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  {% include "components/navbar.html" %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+      <div class="flash flash-{{ cat }}" role="status">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <div class="footer-inner">
+      <a href="{{ url_for('main.index') }}">{{ _('nav_home') }}</a>
+      <a href="{{ url_for('main.about') }}">{{ _('about') }}</a>
+      <a href="{{ url_for('main.help_page') }}">{{ _('help') }}</a>
+      <p>© MediKiosk</p>
+    </div>
+  </footer>
+  <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
