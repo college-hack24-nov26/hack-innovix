@@ -1,32 +1,393 @@
 {% extends "staff/_shell.html" %}
-{% block extra_staff_js %}<script type="module" src="{{ url_for('static', filename='js/triage.js') }}"></script>{% endblock %}
+
+{% block extra_staff_js %}
+<script type="module" src="{{ url_for('static', filename='js/triage.js') }}"></script>
+{% endblock %}
+
 {% block staff %}
-<h1>Triage alerts</h1>
-<table class="dense">
-  <thead><tr><th>Patient</th><th>Age</th><th>Complaint</th><th>Alert</th><th>Severity</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
-  <tbody id="alert-body">
-    {% for a in alerts %}
-      <tr>
-        <td>{{ a.patient.full_name }}</td>
-        <td>{{ a.patient.age }}</td>
-        <td>{{ a.complaint }}</td>
-        <td>{{ a.message }}</td>
-        <td>{{ a.severity }}</td>
-        <td>{{ a.created_at }}</td>
-        <td>{{ a.status }}</td>
-        <td>
-          <form method="post" action="{{ url_for('triage.acknowledge', alert_id=a.id) }}" style="display:inline">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button class="btn btn-ghost" type="submit">Acknowledge</button>
-          </form>
-          <form method="post" action="{{ url_for('triage.resolve', alert_id=a.id) }}" style="display:inline">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button class="btn btn-primary" type="submit">Resolve</button>
-          </form>
-          <a href="{{ url_for('doctor.patient_view', patient_id=a.patient_id) }}">View</a>
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+
+<style>
+  .triage-page {
+    max-width: 1350px;
+    margin: 0 auto;
+    padding: 28px;
+  }
+
+  .triage-header {
+    margin-bottom: 24px;
+  }
+
+  .triage-header h1 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .triage-header p {
+    margin: 7px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  /* Table container */
+  .triage-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+    overflow: hidden;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table.dense {
+    width: 100%;
+    min-width: 1120px;
+    border-collapse: collapse;
+  }
+
+  /* Header */
+  table.dense thead {
+    background: #f8fafc;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  table.dense th {
+    padding: 15px 16px;
+    color: #4b5563;
+    text-align: left;
+
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.45px;
+
+    white-space: nowrap;
+  }
+
+  /* Rows */
+  table.dense td {
+    padding: 16px;
+
+    color: #4b5563;
+    font-size: 13px;
+    line-height: 1.5;
+
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+  }
+
+  table.dense tbody tr {
+    transition: background 0.2s ease;
+  }
+
+  table.dense tbody tr:hover {
+    background: #f8fafc;
+  }
+
+  table.dense tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Patient */
+  table.dense td:first-child {
+    color: #111827;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  /* Age */
+  table.dense td:nth-child(2) {
+    color: #6b7280;
+    white-space: nowrap;
+  }
+
+  /* Complaint */
+  table.dense td:nth-child(3) {
+    max-width: 180px;
+  }
+
+  /* Alert message */
+  table.dense td:nth-child(4) {
+    min-width: 220px;
+    color: #374151;
+    font-weight: 500;
+  }
+
+  /* Severity */
+  table.dense td:nth-child(5) {
+    color: #374151;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  /* Time */
+  table.dense td:nth-child(6) {
+    color: #6b7280;
+    white-space: nowrap;
+  }
+
+  /* Status */
+  table.dense td:nth-child(7) {
+    color: #374151;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Actions */
+  table.dense td:last-child {
+    min-width: 245px;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .action-group {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 7px;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 37px;
+    padding: 8px 13px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+    font-weight: 650;
+
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    color: #374151;
+  }
+
+  .btn-ghost:hover {
+    background: #f8fafc;
+    border-color: #9ca3af;
+  }
+
+  .btn-primary {
+    background: #2563eb;
+    border: 1px solid #2563eb;
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+  }
+
+  .btn:focus-visible,
+  table.dense a:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.15);
+    outline-offset: 2px;
+  }
+
+  /* View link */
+  table.dense td:last-child a {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 8px 10px;
+
+    color: #2563eb;
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 650;
+
+    border-radius: 7px;
+  }
+
+  table.dense td:last-child a:hover {
+    background: #eff6ff;
+  }
+
+  /* Empty state */
+  .triage-empty {
+    padding: 45px 20px !important;
+    color: #6b7280 !important;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .triage-page {
+      padding: 20px;
+    }
+
+    .triage-header h1 {
+      font-size: 26px;
+    }
+
+    .triage-card {
+      border-radius: 12px;
+    }
+
+    table.dense th,
+    table.dense td {
+      padding: 13px 14px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .triage-page {
+      padding: 16px;
+    }
+
+    .triage-header h1 {
+      font-size: 24px;
+    }
+  }
+</style>
+
+<div class="triage-page">
+
+  <div class="triage-header">
+    <h1>Triage alerts</h1>
+    <p>Review, acknowledge, resolve, and monitor patient alerts</p>
+  </div>
+
+  <div class="triage-card">
+
+    <div class="table-wrapper">
+
+      <table class="dense">
+
+        <thead>
+          <tr>
+            <th>Patient</th>
+            <th>Age</th>
+            <th>Complaint</th>
+            <th>Alert</th>
+            <th>Severity</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody id="alert-body">
+
+          {% for a in alerts %}
+
+            <tr>
+
+              <td>
+                {{ a.patient.full_name }}
+              </td>
+
+              <td>
+                {{ a.patient.age }}
+              </td>
+
+              <td>
+                {{ a.complaint }}
+              </td>
+
+              <td>
+                {{ a.message }}
+              </td>
+
+              <td>
+                {{ a.severity }}
+              </td>
+
+              <td>
+                {{ a.created_at }}
+              </td>
+
+              <td>
+                {{ a.status }}
+              </td>
+
+              <td>
+
+                <div class="action-group">
+
+                  <form
+                    method="post"
+                    action="{{ url_for('triage.acknowledge', alert_id=a.id) }}"
+                    style="display:inline"
+                  >
+                    <input
+                      type="hidden"
+                      name="csrf_token"
+                      value="{{ csrf_token() }}"
+                    >
+
+                    <button
+                      class="btn btn-ghost"
+                      type="submit"
+                    >
+                      Acknowledge
+                    </button>
+                  </form>
+
+                  <form
+                    method="post"
+                    action="{{ url_for('triage.resolve', alert_id=a.id) }}"
+                    style="display:inline"
+                  >
+                    <input
+                      type="hidden"
+                      name="csrf_token"
+                      value="{{ csrf_token() }}"
+                    >
+
+                    <button
+                      class="btn btn-primary"
+                      type="submit"
+                    >
+                      Resolve
+                    </button>
+                  </form>
+
+                  <a href="{{ url_for('doctor.patient_view', patient_id=a.patient_id) }}">
+                    View
+                  </a>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          {% endfor %}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
 {% endblock %}

@@ -1,16 +1,505 @@
 {% extends "base.html" %}
-{% block extra_js %}<script type="module" src="{{ url_for('static', filename='js/patient.js') }}"></script>{% endblock %}
+
+{% block extra_css %}
+<style>
+
+/* =====================================================
+   PATIENT DASHBOARD / INTAKE PAGE
+===================================================== */
+
+.patient-shell {
+    width: min(1000px, 92%);
+    margin: 45px auto 110px;
+    padding: 45px;
+
+    background: rgba(255, 255, 255, 0.93);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 28px;
+
+    box-shadow:
+        0 25px 70px rgba(15, 23, 42, 0.10),
+        0 8px 25px rgba(37, 99, 235, 0.06);
+
+    animation: dashboardFade 0.55s ease;
+}
+
+
+/* =====================================================
+   WELCOME HEADING
+===================================================== */
+
+.patient-shell .welcome {
+    margin: 0 0 10px;
+
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+
+    letter-spacing: -1.2px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #0f766e
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+
+/* =====================================================
+   INTRO TEXT
+===================================================== */
+
+.patient-shell > p {
+    margin: 0 0 18px;
+
+    color: #64748b;
+
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+
+/* =====================================================
+   PROGRESS CONTAINER
+===================================================== */
+
+.progress-wrap {
+    position: relative;
+
+    width: 100%;
+    height: 14px;
+
+    margin: 12px 0 38px;
+
+    overflow: hidden;
+
+    background: #e2e8f0;
+
+    border-radius: 50px;
+
+    box-shadow:
+        inset 0 2px 5px rgba(15, 23, 42, 0.08);
+}
+
+
+/* =====================================================
+   PROGRESS BAR
+===================================================== */
+
+.progress-bar {
+    height: 100%;
+
+    min-width: 4px;
+
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #0f766e
+    );
+
+    border-radius: 50px;
+
+    box-shadow:
+        0 3px 10px rgba(37, 99, 235, 0.25);
+
+    transition: width 0.7s ease;
+}
+
+
+/* =====================================================
+   ACTION GRID
+===================================================== */
+
+.action-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+
+/* =====================================================
+   ACTION CARDS
+===================================================== */
+
+.action-card {
+    position: relative;
+
+    min-height: 150px;
+
+    padding: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: #1e3a8a;
+
+    text-decoration: none;
+
+    font-size: 1.08rem;
+    font-weight: 750;
+
+    background: linear-gradient(
+        135deg,
+        #f8fbff,
+        #f0fdf9
+    );
+
+    border: 1px solid #dbeafe;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 7px 20px rgba(15, 23, 42, 0.05);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.28s ease,
+        box-shadow 0.28s ease,
+        border-color 0.28s ease,
+        color 0.28s ease;
+}
+
+
+/* Top accent line */
+
+.action-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #0f766e
+    );
+
+    transform: scaleX(0);
+
+    transform-origin: left;
+
+    transition: transform 0.3s ease;
+}
+
+
+/* Hover */
+
+.action-card:hover {
+    transform: translateY(-6px);
+
+    color: #2563eb;
+
+    border-color: #bfdbfe;
+
+    box-shadow:
+        0 16px 32px rgba(37, 99, 235, 0.14);
+}
+
+.action-card:hover::before {
+    transform: scaleX(1);
+}
+
+
+/* =====================================================
+   INDIVIDUAL CARD VISUALS
+===================================================== */
+
+/* History */
+
+.action-card:nth-child(1)::after {
+    content: "🩺";
+
+    position: absolute;
+
+    top: 18px;
+    right: 20px;
+
+    font-size: 25px;
+
+    opacity: 0.85;
+}
+
+
+/* Reports */
+
+.action-card:nth-child(2)::after {
+    content: "📄";
+
+    position: absolute;
+
+    top: 18px;
+    right: 20px;
+
+    font-size: 25px;
+
+    opacity: 0.85;
+}
+
+
+/* Review */
+
+.action-card:nth-child(3)::after {
+    content: "✓";
+
+    position: absolute;
+
+    top: 17px;
+    right: 20px;
+
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #dcfce7;
+
+    color: #15803d;
+
+    border-radius: 50%;
+
+    font-size: 16px;
+    font-weight: 800;
+}
+
+
+/* Timeline */
+
+.action-card:nth-child(4)::after {
+    content: "📊";
+
+    position: absolute;
+
+    top: 18px;
+    right: 20px;
+
+    font-size: 25px;
+
+    opacity: 0.85;
+}
+
+
+/* =====================================================
+   FOCUS ACCESSIBILITY
+===================================================== */
+
+.action-card:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.25);
+
+    outline-offset: 4px;
+}
+
+
+/* =====================================================
+   PAGE ANIMATION
+===================================================== */
+
+@keyframes dashboardFade {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 750px) {
+
+    .patient-shell {
+        width: 90%;
+
+        padding: 35px 28px;
+
+        margin-top: 30px;
+
+        border-radius: 24px;
+    }
+
+    .action-grid {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+    .action-card {
+        min-height: 120px;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .patient-shell {
+        width: 92%;
+
+        padding: 28px 18px;
+
+        margin: 22px auto 95px;
+
+        border-radius: 20px;
+    }
+
+    .patient-shell .welcome {
+        font-size: 1.85rem;
+
+        letter-spacing: -0.7px;
+    }
+
+    .patient-shell > p {
+        font-size: 0.92rem;
+    }
+
+    .progress-wrap {
+        height: 11px;
+
+        margin-bottom: 28px;
+    }
+
+    .action-card {
+        min-height: 105px;
+
+        padding: 25px 20px;
+
+        font-size: 0.98rem;
+
+        border-radius: 17px;
+    }
+
+    .action-card:nth-child(1)::after,
+    .action-card:nth-child(2)::after,
+    .action-card:nth-child(4)::after {
+        font-size: 21px;
+
+        top: 14px;
+        right: 15px;
+    }
+
+    .action-card:nth-child(3)::after {
+        top: 13px;
+        right: 15px;
+
+        width: 24px;
+        height: 24px;
+    }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .patient-shell {
+        animation: none;
+    }
+
+    .action-card,
+    .action-card::before,
+    .progress-bar {
+        transition: none;
+    }
+
+}
+
+</style>
+{% endblock %}
+
+
+{% block extra_js %}
+<script type="module" src="{{ url_for('static', filename='js/patient.js') }}"></script>
+{% endblock %}
+
+
 {% block content %}
+
 <div class="patient-shell">
-  <h1 class="welcome">{{ _('welcome', name=patient.full_name) }}</h1>
-  <p>{{ _('clinical_intake') }} · {{ progress }}%</p>
-  <div class="progress-wrap" aria-label="Progress"><div class="progress-bar" style="width: {{ progress }}%"></div></div>
-  <div class="action-grid">
-    <a class="card action-card" href="{{ url_for('patient.interview') }}">{{ _('complete_history') }}</a>
-    <a class="card action-card" href="{{ url_for('patient.documents') }}">{{ _('upload_reports') }}</a>
-    <a class="card action-card" href="{{ url_for('patient.review') }}">{{ _('review_information') }}</a>
-    <a class="card action-card" href="{{ url_for('patient.timeline') }}">{{ _('view_timeline') }}</a>
+
+  <h1 class="welcome">
+    {{ _('welcome', name=patient.full_name) }}
+  </h1>
+
+  <p>
+    {{ _('clinical_intake') }} · {{ progress }}%
+  </p>
+
+  <div
+    class="progress-wrap"
+    aria-label="Progress">
+
+    <div
+      class="progress-bar"
+      style="width: {{ progress }}%">
+    </div>
+
   </div>
+
+
+  <div class="action-grid">
+
+    <a
+      class="card action-card"
+      href="{{ url_for('patient.interview') }}">
+      {{ _('complete_history') }}
+    </a>
+
+    <a
+      class="card action-card"
+      href="{{ url_for('patient.documents') }}">
+      {{ _('upload_reports') }}
+    </a>
+
+    <a
+      class="card action-card"
+      href="{{ url_for('patient.review') }}">
+      {{ _('review_information') }}
+    </a>
+
+    <a
+      class="card action-card"
+      href="{{ url_for('patient.timeline') }}">
+      {{ _('view_timeline') }}
+    </a>
+
+  </div>
+
 </div>
+
+
 {% include "components/patient_bottom_nav.html" %}
+
 {% endblock %}

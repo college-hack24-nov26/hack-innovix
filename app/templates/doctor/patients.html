@@ -1,21 +1,277 @@
 {% extends "doctor/_shell.html" %}
+
 {% block staff %}
-<h1>Patients</h1>
-<input id="patient-search" placeholder="Search name, hospital ID, ABHA" value="{{ q or '' }}" aria-label="Search patients">
-<table class="dense">
-  <thead><tr><th>Name</th><th>Age</th><th>Hospital ID</th><th>ABHA</th><th></th></tr></thead>
-  <tbody>
-    {% for p in patients %}
-      <tr>
-        <td>{{ p.full_name }}</td>
-        <td>{{ p.age or "Not reported" }}</td>
-        <td>{{ p.hospital_patient_id or "Not available" }}</td>
-        <td>{{ p.abha_id or "Not available" }}</td>
-        <td><a href="{{ url_for('doctor.patient_view', patient_id=p.id) }}">Open</a></td>
-      </tr>
-    {% else %}
-      <tr><td colspan="5" class="empty">No patients found.</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+
+<style>
+  .patients-page {
+    padding: 28px;
+    max-width: 1250px;
+    margin: 0 auto;
+  }
+
+  .patients-header {
+    margin-bottom: 22px;
+  }
+
+  .patients-header h1 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .patients-header p {
+    margin: 7px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  /* Search */
+  #patient-search {
+    width: 100%;
+    max-width: 520px;
+    height: 46px;
+    padding: 0 15px;
+    margin-bottom: 20px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+
+    background: #ffffff;
+    color: #1f2937;
+
+    font-size: 14px;
+    outline: none;
+
+    box-sizing: border-box;
+
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  #patient-search::placeholder {
+    color: #9ca3af;
+  }
+
+  #patient-search:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+
+  /* Table container */
+  .patients-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+    overflow: hidden;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table.dense {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+  }
+
+  table.dense thead {
+    background: #f8fafc;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  table.dense th {
+    padding: 15px 18px;
+    text-align: left;
+
+    color: #4b5563;
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  table.dense td {
+    padding: 17px 18px;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    color: #374151;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+
+  table.dense tbody tr {
+    transition: background 0.2s ease;
+  }
+
+  table.dense tbody tr:hover {
+    background: #f8fafc;
+  }
+
+  table.dense tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Patient name */
+  table.dense td:first-child {
+    color: #111827;
+    font-weight: 650;
+  }
+
+  /* Open button */
+  table.dense td:last-child {
+    text-align: right;
+  }
+
+  table.dense td:last-child a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 76px;
+    padding: 8px 14px;
+
+    background: #2563eb;
+    border: 1px solid #2563eb;
+    border-radius: 8px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 650;
+
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  table.dense td:last-child a:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+    transform: translateY(-1px);
+  }
+
+  table.dense td:last-child a:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.2);
+    outline-offset: 2px;
+  }
+
+  /* Empty state */
+  table.dense .empty {
+    padding: 45px 20px;
+    text-align: center;
+
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  /* Mobile */
+  @media (max-width: 700px) {
+    .patients-page {
+      padding: 18px;
+    }
+
+    .patients-header h1 {
+      font-size: 25px;
+    }
+
+    #patient-search {
+      max-width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .patients-card {
+      border-radius: 12px;
+    }
+
+    table.dense th,
+    table.dense td {
+      padding: 13px 14px;
+    }
+  }
+</style>
+
+<div class="patients-page">
+
+  <div class="patients-header">
+    <h1>Patients</h1>
+    <p>Search and access registered patient records</p>
+  </div>
+
+  <input
+    id="patient-search"
+    placeholder="Search name, hospital ID, ABHA"
+    value="{{ q or '' }}"
+    aria-label="Search patients"
+  >
+
+  <div class="patients-card">
+
+    <div class="table-wrapper">
+
+      <table class="dense">
+
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Hospital ID</th>
+            <th>ABHA</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for p in patients %}
+            <tr>
+              <td>{{ p.full_name }}</td>
+
+              <td>
+                {{ p.age or "Not reported" }}
+              </td>
+
+              <td>
+                {{ p.hospital_patient_id or "Not available" }}
+              </td>
+
+              <td>
+                {{ p.abha_id or "Not available" }}
+              </td>
+
+              <td>
+                <a href="{{ url_for('doctor.patient_view', patient_id=p.id) }}">
+                  Open
+                </a>
+              </td>
+            </tr>
+
+          {% else %}
+
+            <tr>
+              <td colspan="5" class="empty">
+                No patients found.
+              </td>
+            </tr>
+
+          {% endfor %}
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
 {% endblock %}

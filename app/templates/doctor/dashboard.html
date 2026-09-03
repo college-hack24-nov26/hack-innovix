@@ -1,12 +1,152 @@
 {% extends "doctor/_shell.html" %}
+
 {% block staff %}
-<h1>Dashboard</h1>
-<div class="stat-grid">
-  <div class="card"><div>Today's Patients</div><div class="stat">{{ patients_today }}</div></div>
-  <div class="card"><div>Histories Completed</div><div class="stat">{{ completed }}</div></div>
-  <div class="card"><div>Pending Reviews</div><div class="stat">{{ pending }}</div></div>
-  <div class="card"><div>Red Flag Alerts</div><div class="stat">{{ alerts }}</div></div>
-  <div class="card"><div>Average Intake Time</div><div class="stat">{{ avg_intake }}</div></div>
-  <div class="card"><div>Documents Processed</div><div class="stat">{{ docs }}</div></div>
+
+<style>
+  .doctor-dashboard {
+    padding: 28px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .dashboard-header {
+    margin-bottom: 26px;
+  }
+
+  .dashboard-header h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: #1f2937;
+    letter-spacing: -0.5px;
+  }
+
+  .dashboard-header p {
+    margin: 7px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .stat-grid .card {
+    position: relative;
+    padding: 22px;
+    min-height: 125px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
+    overflow: hidden;
+  }
+
+  .stat-grid .card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: #2563eb;
+  }
+
+  .stat-grid .card:hover {
+    transform: translateY(-3px);
+    border-color: #cbd5e1;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+  }
+
+  .stat-grid .card > div:first-child {
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .stat-grid .stat {
+    color: #111827;
+    font-size: 32px;
+    line-height: 1;
+    font-weight: 750;
+    letter-spacing: -1px;
+  }
+
+  @media (max-width: 900px) {
+    .stat-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .doctor-dashboard {
+      padding: 18px;
+    }
+
+    .dashboard-header h1 {
+      font-size: 25px;
+    }
+
+    .stat-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .stat-grid .card {
+      min-height: 110px;
+    }
+
+    .stat-grid .stat {
+      font-size: 28px;
+    }
+  }
+</style>
+
+<div class="doctor-dashboard">
+
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <p>Overview of today's patient intake and clinical activity</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="card">
+      <div>Today's Patients</div>
+      <div class="stat">{{ patients_today }}</div>
+    </div>
+
+    <div class="card">
+      <div>Histories Completed</div>
+      <div class="stat">{{ completed }}</div>
+    </div>
+
+    <div class="card">
+      <div>Pending Reviews</div>
+      <div class="stat">{{ pending }}</div>
+    </div>
+
+    <div class="card">
+      <div>Red Flag Alerts</div>
+      <div class="stat">{{ alerts }}</div>
+    </div>
+
+    <div class="card">
+      <div>Average Intake Time</div>
+      <div class="stat">{{ avg_intake }}</div>
+    </div>
+
+    <div class="card">
+      <div>Documents Processed</div>
+      <div class="stat">{{ docs }}</div>
+    </div>
+  </div>
+
 </div>
+
 {% endblock %}

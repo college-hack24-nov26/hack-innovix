@@ -1,18 +1,473 @@
 {% extends "base.html" %}
-{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/patient.css') }}">{% endblock %}
-{% block extra_js %}<script type="module" src="{{ url_for('static', filename='js/patient.js') }}"></script>{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/patient.css') }}">
+
+<style>
+
+/* =====================================================
+   PATIENT PROFILE
+   Clean • Professional • Minimal Color
+===================================================== */
+
+.patient-shell {
+    width: min(760px, 92%);
+
+    margin: 45px auto 110px;
+
+    padding: 40px 45px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 35px rgba(15, 23, 42, 0.08);
+
+    animation: profileFade 0.45s ease;
+}
+
+
+/* =====================================================
+   PAGE TITLE
+===================================================== */
+
+.patient-shell > h1 {
+    margin: 0 0 30px;
+
+    color: #1e293b;
+
+    font-size: clamp(1.9rem, 4vw, 2.5rem);
+
+    font-weight: 750;
+
+    letter-spacing: -0.8px;
+
+    border-bottom: 1px solid #e2e8f0;
+
+    padding-bottom: 20px;
+}
+
+
+/* =====================================================
+   PROFILE FORM
+===================================================== */
+
+.patient-shell .form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+/* =====================================================
+   PATIENT INFORMATION
+===================================================== */
+
+.patient-shell .form > p {
+    margin: 0;
+
+    padding: 15px 17px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    color: #475569;
+
+    font-size: 0.95rem;
+
+    line-height: 1.5;
+}
+
+
+/* First information row */
+
+.patient-shell .form > p:first-of-type {
+    color: #1e293b;
+
+    font-weight: 650;
+}
+
+
+/* =====================================================
+   FORM LABELS
+===================================================== */
+
+.patient-shell .form > label {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    color: #334155;
+
+    font-size: 0.92rem;
+
+    font-weight: 650;
+}
+
+
+/* =====================================================
+   DEPARTMENT INPUT
+===================================================== */
+
+.patient-shell .form input[name="department"] {
+    width: 100%;
+
+    min-height: 48px;
+
+    padding: 11px 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #1e293b;
+
+    font-family: inherit;
+
+    font-size: 0.95rem;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.patient-shell .form input[name="department"]:hover {
+    border-color: #94a3b8;
+}
+
+
+.patient-shell .form input[name="department"]:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* =====================================================
+   AYUSH CHECKBOX
+===================================================== */
+
+.patient-shell .form > label:has(#ayush-toggle) {
+    flex-direction: row;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 15px 17px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.patient-shell .form > label:has(#ayush-toggle):hover {
+    background: #f8fafc;
+
+    border-color: #cbd5e1;
+}
+
+
+/* Checkbox */
+
+#ayush-toggle {
+    width: 19px;
+    height: 19px;
+
+    margin: 0;
+
+    accent-color: #2563eb;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   SAVE BUTTON
+===================================================== */
+
+.patient-shell .form .btn-primary {
+    align-self: flex-end;
+
+    min-width: 150px;
+
+    min-height: 50px;
+
+    margin-top: 8px;
+
+    padding: 12px 25px;
+
+    border: none !important;
+
+    border-radius: 10px;
+
+    background: #2563eb !important;
+
+    color: #ffffff !important;
+
+    font-family: inherit;
+
+    font-size: 0.95rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 18px rgba(37, 99, 235, 0.18);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.patient-shell .form .btn-primary:hover {
+    background: #1d4ed8 !important;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 22px rgba(37, 99, 235, 0.25);
+}
+
+
+.patient-shell .form .btn-primary:active {
+    transform: translateY(0);
+}
+
+
+/* =====================================================
+   FOCUS ACCESSIBILITY
+===================================================== */
+
+.patient-shell button:focus-visible,
+.patient-shell input:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.20);
+
+    outline-offset: 2px;
+}
+
+
+/* =====================================================
+   PAGE ANIMATION
+===================================================== */
+
+@keyframes profileFade {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .patient-shell {
+        width: 92%;
+
+        padding: 32px 28px;
+
+        margin-top: 30px;
+
+        border-radius: 18px;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .patient-shell {
+        width: 94%;
+
+        padding: 27px 18px;
+
+        margin: 22px auto 95px;
+
+        border-radius: 16px;
+    }
+
+    .patient-shell > h1 {
+        font-size: 1.8rem;
+
+        padding-bottom: 17px;
+
+        margin-bottom: 23px;
+    }
+
+    .patient-shell .form {
+        gap: 14px;
+    }
+
+    .patient-shell .form > p {
+        padding: 13px 14px;
+
+        font-size: 0.88rem;
+    }
+
+    .patient-shell .form > label {
+        font-size: 0.88rem;
+    }
+
+    .patient-shell .form input[name="department"] {
+        min-height: 46px;
+
+        font-size: 0.92rem;
+    }
+
+    .patient-shell .form > label:has(#ayush-toggle) {
+        padding: 13px 14px;
+
+        font-size: 0.88rem;
+    }
+
+    .patient-shell .form .btn-primary {
+        width: 100%;
+
+        min-height: 50px;
+
+        margin-top: 5px;
+    }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .patient-shell {
+        animation: none;
+    }
+
+    .patient-shell button,
+    .patient-shell input,
+    .patient-shell label {
+        transition: none;
+    }
+
+}
+
+</style>
+{% endblock %}
+
+
+{% block extra_js %}
+<script type="module" src="{{ url_for('static', filename='js/patient.js') }}"></script>
+{% endblock %}
+
+
 {% block content %}
+
 <div class="patient-shell">
+
   <h1>Profile</h1>
+
   <form method="post" class="form">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <p>{{ patient.full_name }} · {{ patient.age or "Age not reported" }} · {{ patient.gender }}</p>
-    <p>Hospital ID: {{ patient.hospital_patient_id or "Not available" }}</p>
-    <p>ABHA ID: {{ patient.abha_id or "Not available" }}</p>
-    <label>Department <input name="department" value="{{ patient.department or '' }}"></label>
-    <label><input type="checkbox" name="ayush_mode" id="ayush-toggle" {% if patient.ayush_mode %}checked{% endif %}> AYUSH History</label>
-    <button class="btn btn-primary" type="submit">Save</button>
+
+    <input
+      type="hidden"
+      name="csrf_token"
+      value="{{ csrf_token() }}">
+
+    <p>
+      {{ patient.full_name }} ·
+      {{ patient.age or "Age not reported" }} ·
+      {{ patient.gender }}
+    </p>
+
+    <p>
+      Hospital ID:
+      {{ patient.hospital_patient_id or "Not available" }}
+    </p>
+
+    <p>
+      ABHA ID:
+      {{ patient.abha_id or "Not available" }}
+    </p>
+
+    <label>
+      Department
+
+      <input
+        name="department"
+        value="{{ patient.department or '' }}">
+    </label>
+
+    <label>
+
+      <input
+        type="checkbox"
+        name="ayush_mode"
+        id="ayush-toggle"
+        {% if patient.ayush_mode %}checked{% endif %}>
+
+      AYUSH History
+
+    </label>
+
+    <button
+      class="btn btn-primary"
+      type="submit">
+      Save
+    </button>
+
   </form>
+
 </div>
+
 {% include "components/patient_bottom_nav.html" %}
+
 {% endblock %}
