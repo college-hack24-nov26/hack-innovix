@@ -1,7 +1,894 @@
 {% extends "base.html" %}
+
 {% block content %}
-<section class="section">
-  <h1>About</h1>
-  <p>MediKiosk prepares a structured patient history and digitises prior reports so clinicians can review a clear summary before the consultation.</p>
+
+<section class="about-page">
+
+  <!-- Hero Section -->
+  <div class="about-hero">
+    <div class="hero-content">
+      <span class="about-badge">🏥 AI-Powered Healthcare</span>
+
+      <h1>
+        About <span>MediKiosk</span>
+      </h1>
+
+      <p class="hero-text">
+        A smart patient case-taking platform that helps collect,
+        organize, and summarize medical information before consultation.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="{{ url_for('main.index') }}" class="btn-primary">
+          Get Started →
+        </a>
+
+        <a href="#how-it-works" class="btn-secondary">
+          How It Works
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="medical-orbit">
+        <div class="orbit-icon icon-1">🎤</div>
+        <div class="orbit-icon icon-2">📄</div>
+        <div class="orbit-icon icon-3">🧠</div>
+        <div class="orbit-icon icon-4">🩺</div>
+
+        <div class="kiosk-circle">
+          <div class="kiosk-icon">✚</div>
+          <strong>MediKiosk</strong>
+          <small>Smart Healthcare</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- What is MediKiosk -->
+  <section class="about-section">
+
+    <div class="section-heading">
+      <span>WHAT WE DO</span>
+      <h2>Making Patient History <strong>Smarter & Simpler</strong></h2>
+      <p>
+        MediKiosk helps patients share their medical information easily
+        while giving doctors a clear and organized overview.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon">🎤</div>
+        <h3>AI Patient Interview</h3>
+        <p>
+          Patients can answer questions using voice, text, or touch.
+          The system can ask relevant follow-up questions.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📄</div>
+        <h3>Medical Reports</h3>
+        <p>
+          Upload or scan previous prescriptions, laboratory reports,
+          and other medical documents.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>OCR & AI Processing</h3>
+        <p>
+          Medical documents can be converted into useful structured
+          information using OCR and AI.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3>Structured Summary</h3>
+        <p>
+          Patient information is organized into a clear summary
+          that can be reviewed by the doctor.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- How it Works -->
+  <section class="how-section" id="how-it-works">
+
+    <div class="section-heading">
+      <span>HOW IT WORKS</span>
+      <h2>From Patient Story to <strong>Doctor's Insight</strong></h2>
+    </div>
+
+    <div class="process">
+
+      <div class="process-step">
+        <div class="step-number">01</div>
+        <div class="step-icon">👤</div>
+        <h3>Patient</h3>
+        <p>Provides basic information and gives consent.</p>
+      </div>
+
+      <div class="process-line"></div>
+
+      <div class="process-step">
+        <div class="step-number">02</div>
+        <div class="step-icon">🤖</div>
+        <h3>AI Interview</h3>
+        <p>Answers health questions through voice, text, or touch.</p>
+      </div>
+
+      <div class="process-line"></div>
+
+      <div class="process-step">
+        <div class="step-number">03</div>
+        <div class="step-icon">📄</div>
+        <h3>Reports</h3>
+        <p>Old medical documents are uploaded and processed.</p>
+      </div>
+
+      <div class="process-line"></div>
+
+      <div class="process-step">
+        <div class="step-number">04</div>
+        <div class="step-icon">🧠</div>
+        <h3>AI Summary</h3>
+        <p>Information is organized into a structured history.</p>
+      </div>
+
+      <div class="process-line"></div>
+
+      <div class="process-step">
+        <div class="step-number">05</div>
+        <div class="step-icon">👨‍⚕️</div>
+        <h3>Doctor Review</h3>
+        <p>The doctor reviews, edits, and verifies the information.</p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Key Benefits -->
+  <section class="benefits-section">
+
+    <div class="section-heading">
+      <span>WHY MEDIKIOSK?</span>
+      <h2>Built for <strong>Patients, Doctors & Hospitals</strong></h2>
+    </div>
+
+    <div class="benefit-grid">
+
+      <div class="benefit-card">
+        <div class="benefit-icon">👨‍⚕️</div>
+        <div>
+          <h3>For Doctors</h3>
+          <p>
+            Quickly review structured patient history and previous
+            medical information.
+          </p>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">👤</div>
+        <div>
+          <h3>For Patients</h3>
+          <p>
+            Simple voice, text, touch, and multilingual interaction
+            makes information sharing easier.
+          </p>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">🏥</div>
+        <div>
+          <h3>For Hospitals</h3>
+          <p>
+            Helps reduce repetitive manual work and organize patient
+            information digitally.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Trust Section -->
+  <section class="trust-section">
+
+    <div class="trust-content">
+      <span class="about-badge">🔐 Patient-Centered</span>
+
+      <h2>
+        Technology that assists,
+        <span>Doctors who decide.</span>
+      </h2>
+
+      <p>
+        MediKiosk is designed as a clinical assistance system.
+        AI-generated information is intended to be reviewed and
+        verified by healthcare professionals before use.
+      </p>
+
+      <div class="trust-points">
+        <div>✓ Patient consent</div>
+        <div>✓ Secure data handling</div>
+        <div>✓ Doctor verification</div>
+        <div>✓ Structured medical information</div>
+      </div>
+    </div>
+
+    <div class="trust-visual">
+      <div class="shield">🔐</div>
+      <h3>Secure & Responsible</h3>
+      <p>Patient information remains under controlled access.</p>
+    </div>
+
+  </section>
+
+
+  <!-- Final CTA -->
+  <section class="about-cta">
+
+    <div>
+      <span>THE FUTURE OF PATIENT CASE-TAKING</span>
+
+      <h2>
+        Better Information.
+        <br>
+        Better Preparation.
+        <br>
+        Better Consultation.
+      </h2>
+
+      <p>
+        MediKiosk connects patients, medical information,
+        AI, and doctors in one simple workflow.
+      </p>
+    </div>
+
+    <a href="{{ url_for('main.index') }}" class="cta-button">
+      Explore MediKiosk →
+    </a>
+
+  </section>
+
 </section>
+
+
+<style>
+
+/* ================================
+   ABOUT PAGE
+================================ */
+
+.about-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(20, 184, 166, .10), transparent 30%),
+    radial-gradient(circle at 90% 20%, rgba(37, 99, 235, .10), transparent 30%),
+    #f8fafc;
+  color: #0f172a;
+}
+
+
+/* HERO */
+
+.about-hero {
+  max-width: 1200px;
+  margin: auto;
+  padding: 80px 25px 70px;
+
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.about-badge {
+  display: inline-flex;
+  padding: 9px 16px;
+  border-radius: 50px;
+
+  background: rgba(16, 185, 129, .10);
+  color: #047857;
+
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .4px;
+}
+
+.hero-content h1 {
+  font-size: clamp(48px, 7vw, 78px);
+  line-height: .95;
+  margin: 25px 0;
+
+  letter-spacing: -3px;
+}
+
+.hero-content h1 span {
+  background: linear-gradient(135deg, #2563eb, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-text {
+  max-width: 650px;
+  font-size: 19px;
+  line-height: 1.8;
+  color: #64748b;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.btn-primary,
+.btn-secondary,
+.cta-button {
+  text-decoration: none;
+  padding: 14px 23px;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: .25s ease;
+}
+
+.btn-primary,
+.cta-button {
+  background: #0f766e;
+  color: white;
+}
+
+.btn-primary:hover,
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(15, 118, 110, .20);
+}
+
+.btn-secondary {
+  background: white;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+}
+
+
+/* HERO VISUAL */
+
+.hero-visual {
+  display: flex;
+  justify-content: center;
+}
+
+.medical-orbit {
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(circle, white 30%, rgba(20, 184, 166, .08));
+
+  border: 1px solid #dbeafe;
+}
+
+.medical-orbit::before {
+  content: "";
+  position: absolute;
+  width: 270px;
+  height: 270px;
+  border: 1px dashed #93c5fd;
+  border-radius: 50%;
+}
+
+.kiosk-circle {
+  width: 150px;
+  height: 150px;
+
+  border-radius: 35px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background: white;
+  box-shadow: 0 25px 70px rgba(15, 23, 42, .15);
+
+  z-index: 2;
+}
+
+.kiosk-icon {
+  width: 50px;
+  height: 50px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  background: linear-gradient(135deg, #2563eb, #10b981);
+  color: white;
+
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.kiosk-circle strong {
+  font-size: 18px;
+}
+
+.kiosk-circle small {
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.orbit-icon {
+  position: absolute;
+
+  width: 55px;
+  height: 55px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 18px;
+
+  background: white;
+
+  box-shadow: 0 12px 35px rgba(15, 23, 42, .12);
+
+  font-size: 25px;
+
+  z-index: 3;
+}
+
+.icon-1 {
+  top: 20px;
+  left: 150px;
+}
+
+.icon-2 {
+  right: 25px;
+  top: 145px;
+}
+
+.icon-3 {
+  bottom: 35px;
+  left: 70px;
+}
+
+.icon-4 {
+  left: 25px;
+  top: 145px;
+}
+
+
+/* SECTIONS */
+
+.about-section,
+.how-section,
+.benefits-section {
+  max-width: 1200px;
+  margin: auto;
+  padding: 80px 25px;
+}
+
+.section-heading {
+  max-width: 720px;
+  margin-bottom: 45px;
+}
+
+.section-heading > span {
+  color: #0f766e;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.section-heading h2 {
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.15;
+  margin: 12px 0;
+}
+
+.section-heading h2 strong {
+  color: #0f766e;
+}
+
+.section-heading p {
+  color: #64748b;
+  line-height: 1.7;
+}
+
+
+/* FEATURE CARDS */
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.feature-card {
+  padding: 28px;
+  border-radius: 22px;
+
+  background: rgba(255,255,255,.85);
+  border: 1px solid #e2e8f0;
+
+  transition: .3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 60px rgba(15, 23, 42, .09);
+}
+
+.feature-icon {
+  width: 52px;
+  height: 52px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  background: #ecfeff;
+
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+
+.feature-card h3 {
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  color: #64748b;
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+
+/* PROCESS */
+
+.how-section {
+  max-width: none;
+  background: #ffffff;
+}
+
+.how-section > * {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.process {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.process-step {
+  width: 190px;
+  padding: 25px 18px;
+
+  text-align: center;
+
+  border-radius: 20px;
+
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+
+  position: relative;
+}
+
+.step-number {
+  position: absolute;
+  top: -12px;
+  right: 12px;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  background: #0f766e;
+  color: white;
+
+  padding: 5px 8px;
+  border-radius: 20px;
+}
+
+.step-icon {
+  font-size: 35px;
+  margin-bottom: 12px;
+}
+
+.process-step h3 {
+  margin: 5px 0;
+}
+
+.process-step p {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.process-line {
+  width: 35px;
+  height: 2px;
+  background: #cbd5e1;
+}
+
+
+/* BENEFITS */
+
+.benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.benefit-card {
+  display: flex;
+  gap: 20px;
+
+  padding: 30px;
+
+  border-radius: 22px;
+
+  background: white;
+  border: 1px solid #e2e8f0;
+
+  transition: .3s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, .08);
+}
+
+.benefit-icon {
+  min-width: 55px;
+  height: 55px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 16px;
+
+  background: #eff6ff;
+
+  font-size: 25px;
+}
+
+.benefit-card p {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+
+/* TRUST */
+
+.trust-section {
+  max-width: 1200px;
+  margin: 30px auto 80px;
+
+  padding: 60px;
+
+  display: grid;
+  grid-template-columns: 1.3fr .7fr;
+  gap: 50px;
+
+  border-radius: 30px;
+
+  background: linear-gradient(135deg, #0f172a, #134e4a);
+
+  color: white;
+}
+
+.trust-content h2 {
+  font-size: clamp(32px, 5vw, 50px);
+  line-height: 1.1;
+  margin: 20px 0;
+}
+
+.trust-content h2 span {
+  color: #5eead4;
+}
+
+.trust-content p {
+  color: #cbd5e1;
+  line-height: 1.7;
+  max-width: 650px;
+}
+
+.trust-points {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  margin-top: 25px;
+
+  color: #d1fae5;
+}
+
+.trust-visual {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+}
+
+.shield {
+  width: 110px;
+  height: 110px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 35px;
+
+  background: rgba(255,255,255,.1);
+
+  font-size: 50px;
+
+  margin-bottom: 20px;
+}
+
+.trust-visual p {
+  color: #cbd5e1;
+}
+
+
+/* CTA */
+
+.about-cta {
+  max-width: 1200px;
+  margin: 0 auto 80px;
+
+  padding: 60px;
+
+  border-radius: 30px;
+
+  background: linear-gradient(135deg, #dbeafe, #ccfbf1);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 40px;
+}
+
+.about-cta > div > span {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #0f766e;
+}
+
+.about-cta h2 {
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.05;
+  margin: 15px 0;
+}
+
+.about-cta p {
+  color: #475569;
+  max-width: 600px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+
+  .about-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-text,
+  .section-heading {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .process {
+    flex-wrap: wrap;
+  }
+
+  .process-line {
+    display: none;
+  }
+
+  .benefit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trust-section {
+    grid-template-columns: 1fr;
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .about-hero {
+    padding-top: 50px;
+  }
+
+  .hero-content h1 {
+    letter-spacing: -2px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .medical-orbit {
+    width: 290px;
+    height: 290px;
+  }
+
+  .icon-1 {
+    left: 118px;
+  }
+
+  .trust-section,
+  .about-cta {
+    padding: 35px 25px;
+  }
+
+  .trust-points {
+    grid-template-columns: 1fr;
+  }
+
+  .about-cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+}
+
+</style>
+
 {% endblock %}

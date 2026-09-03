@@ -1,35 +1,581 @@
 {% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+
+/* =====================================================
+   PATIENT TIMELINE
+   Clean • Professional • Minimal Color
+===================================================== */
+
+.patient-shell {
+    width: min(900px, 92%);
+
+    margin: 45px auto 110px;
+
+    padding: 40px 45px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 35px rgba(15, 23, 42, 0.08);
+
+    animation: timelineFade 0.45s ease;
+}
+
+
+/* =====================================================
+   PAGE TITLE
+===================================================== */
+
+.patient-shell > h1 {
+    margin: 0 0 28px;
+
+    color: #1e293b;
+
+    font-size: clamp(1.9rem, 4vw, 2.5rem);
+
+    font-weight: 750;
+
+    letter-spacing: -0.8px;
+}
+
+
+/* =====================================================
+   FILTER ROW
+===================================================== */
+
+.filter-row {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 9px;
+
+    margin-bottom: 35px;
+
+    padding-bottom: 22px;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+
+/* =====================================================
+   FILTER CHIPS
+===================================================== */
+
+.filter-row .chip {
+    padding: 9px 17px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    font-family: inherit;
+
+    font-size: 0.88rem;
+
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.filter-row .chip:hover {
+    background: #f8fafc;
+
+    border-color: #94a3b8;
+
+    color: #1e293b;
+
+    transform: translateY(-1px);
+}
+
+
+/* First filter looks selected */
+
+.filter-row .chip:first-child {
+    background: #2563eb;
+
+    border-color: #2563eb;
+
+    color: #ffffff;
+}
+
+
+/* =====================================================
+   TIMELINE
+===================================================== */
+
+.timeline {
+    position: relative;
+
+    margin: 5px 0 0;
+
+    padding-left: 35px;
+}
+
+
+/* Vertical line */
+
+.timeline::before {
+    content: "";
+
+    position: absolute;
+
+    left: 8px;
+
+    top: 5px;
+
+    bottom: 5px;
+
+    width: 2px;
+
+    background: #cbd5e1;
+}
+
+
+/* =====================================================
+   TIMELINE ITEM
+===================================================== */
+
+.timeline-item {
+    position: relative;
+
+    margin-bottom: 22px;
+
+    padding: 20px 22px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 13px;
+
+    box-shadow:
+        0 5px 18px rgba(15, 23, 42, 0.05);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* Timeline dot */
+
+.timeline-item::before {
+    content: "";
+
+    position: absolute;
+
+    left: -35px;
+
+    top: 25px;
+
+    width: 12px;
+
+    height: 12px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 3px solid #2563eb;
+
+    border-radius: 50%;
+
+    z-index: 2;
+}
+
+
+/* Timeline item hover */
+
+.timeline-item:hover {
+    border-color: #cbd5e1;
+
+    transform: translateX(3px);
+
+    box-shadow:
+        0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+.timeline-item > strong {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #1e293b;
+
+    font-size: 0.92rem;
+
+    font-weight: 750;
+}
+
+
+/* =====================================================
+   EVENT TYPE + TITLE
+===================================================== */
+
+.timeline-item > div:nth-of-type(1) {
+    margin-bottom: 8px;
+
+    color: #334155;
+
+    font-size: 0.98rem;
+
+    font-weight: 650;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   EVENT DETAILS
+===================================================== */
+
+.timeline-item > div:nth-of-type(2) {
+    margin-bottom: 12px;
+
+    color: #64748b;
+
+    font-size: 0.92rem;
+
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   SOURCE
+===================================================== */
+
+.timeline-item small {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 0.78rem;
+
+    line-height: 1.4;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.timeline .empty {
+    margin: 0;
+
+    padding: 30px 20px;
+
+    text-align: center;
+
+    color: #64748b;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 13px;
+
+    font-size: 0.95rem;
+
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   FOCUS
+===================================================== */
+
+.filter-row .chip:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.20);
+
+    outline-offset: 2px;
+}
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes timelineFade {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .patient-shell {
+        width: 92%;
+
+        padding: 32px 27px;
+
+        margin-top: 30px;
+
+        border-radius: 18px;
+    }
+
+    .timeline {
+        padding-left: 30px;
+    }
+
+    .timeline::before {
+        left: 7px;
+    }
+
+    .timeline-item::before {
+        left: -30px;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .patient-shell {
+        width: 94%;
+
+        padding: 27px 18px;
+
+        margin: 22px auto 95px;
+
+        border-radius: 16px;
+    }
+
+    .patient-shell > h1 {
+        font-size: 1.8rem;
+
+        margin-bottom: 22px;
+    }
+
+    .filter-row {
+        gap: 7px;
+
+        margin-bottom: 27px;
+
+        padding-bottom: 18px;
+    }
+
+    .filter-row .chip {
+        padding: 8px 12px;
+
+        font-size: 0.8rem;
+    }
+
+    .timeline {
+        padding-left: 27px;
+    }
+
+    .timeline::before {
+        left: 6px;
+    }
+
+    .timeline-item {
+        padding: 17px;
+
+        border-radius: 11px;
+    }
+
+    .timeline-item::before {
+        left: -27px;
+
+        top: 22px;
+
+        width: 11px;
+
+        height: 11px;
+    }
+
+    .timeline-item > strong {
+        font-size: 0.85rem;
+    }
+
+    .timeline-item > div:nth-of-type(1) {
+        font-size: 0.9rem;
+    }
+
+    .timeline-item > div:nth-of-type(2) {
+        font-size: 0.86rem;
+    }
+
+    .timeline-item small {
+        font-size: 0.74rem;
+    }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .patient-shell {
+        animation: none;
+    }
+
+    .timeline-item,
+    .filter-row .chip {
+        transition: none;
+    }
+
+}
+
+</style>
+{% endblock %}
+
+
 {% block content %}
+
 <div class="patient-shell">
+
   <h1>Timeline</h1>
+
   <div class="filter-row">
-    <button class="chip" type="button" data-filter="all">All</button>
-    <button class="chip" type="button" data-filter="Prescription">Prescription</button>
-    <button class="chip" type="button" data-filter="Laboratory">Laboratory</button>
-    <button class="chip" type="button" data-filter="Diagnosis">Diagnosis</button>
+
+    <button
+      class="chip"
+      type="button"
+      data-filter="all">
+      All
+    </button>
+
+    <button
+      class="chip"
+      type="button"
+      data-filter="Prescription">
+      Prescription
+    </button>
+
+    <button
+      class="chip"
+      type="button"
+      data-filter="Laboratory">
+      Laboratory
+    </button>
+
+    <button
+      class="chip"
+      type="button"
+      data-filter="Diagnosis">
+      Diagnosis
+    </button>
+
   </div>
+
+
   <div class="timeline">
+
     {% for item in items %}
-      <div class="timeline-item" data-type="{{ item.type }}">
-        <strong>{{ item.date or "Date not available" }}</strong>
-        <div>{{ item.type }} · {{ item.title }}</div>
-        <div>{{ item.details }}</div>
-        <small>Source: {{ item.source or "Not available" }}</small>
+
+      <div
+        class="timeline-item"
+        data-type="{{ item.type }}">
+
+        <strong>
+          {{ item.date or "Date not available" }}
+        </strong>
+
+        <div>
+          {{ item.type }} · {{ item.title }}
+        </div>
+
+        <div>
+          {{ item.details }}
+        </div>
+
+        <small>
+          Source: {{ item.source or "Not available" }}
+        </small>
+
       </div>
+
     {% else %}
-      <p class="empty">No events yet. Upload reports or complete history.</p>
+
+      <p class="empty">
+        No events yet. Upload reports or complete history.
+      </p>
+
     {% endfor %}
+
   </div>
+
 </div>
+
+
 {% include "components/patient_bottom_nav.html" %}
+
+
 <script>
-  document.querySelectorAll("[data-filter]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const f = btn.dataset.filter;
-      document.querySelectorAll(".timeline-item").forEach((el) => {
-        el.style.display = (f === "all" || (el.dataset.type || "").toLowerCase().includes(f.toLowerCase())) ? "" : "none";
-      });
+
+document.querySelectorAll("[data-filter]").forEach((btn) => {
+
+  btn.addEventListener("click", () => {
+
+    const f = btn.dataset.filter;
+
+    document.querySelectorAll(".timeline-item").forEach((el) => {
+
+      el.style.display =
+        (
+          f === "all" ||
+          (el.dataset.type || "")
+            .toLowerCase()
+            .includes(f.toLowerCase())
+        )
+        ? ""
+        : "none";
+
     });
+
   });
+
+});
+
 </script>
+
 {% endblock %}

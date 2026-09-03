@@ -1,9 +1,2072 @@
 {% extends "base.html" %}
+
 {% block content %}
-<section class="section">
-  <h1>Help</h1>
-  <p>Patients: register, provide consent, complete the interview, upload reports, then submit.</p>
-  <p>Clinicians: sign in from the login page to open the patient queue, documents, and summaries.</p>
-  <p>Voice input is optional and uses the browser when available.</p>
-</section>
+
+<main class="help-page">
+
+  <!-- =========================
+       HERO
+  ========================== -->
+  <section class="help-hero">
+
+    <div class="help-hero-content">
+
+      <div class="help-badge">
+        💡 MediKiosk Support Center
+      </div>
+
+      <h1>
+        How can we
+        <span>help you?</span>
+      </h1>
+
+      <p>
+        Find simple guides and answers to help you use MediKiosk
+        smoothly — whether you are a patient, doctor, or hospital staff member.
+      </p>
+
+      <div class="help-search">
+        <span>🔍</span>
+        <input
+          type="text"
+          id="helpSearch"
+          placeholder="Search help topics..."
+          onkeyup="searchHelp()"
+        />
+      </div>
+
+    </div>
+
+    <div class="help-hero-visual">
+
+      <div class="support-circle">
+        <div class="support-icon">💬</div>
+
+        <strong>Need Help?</strong>
+
+        <small>
+          We're here to guide you
+        </small>
+      </div>
+
+      <div class="floating-help-card card-one">
+        🎤 Voice Support
+      </div>
+
+      <div class="floating-help-card card-two">
+        📄 Report Upload
+      </div>
+
+      <div class="floating-help-card card-three">
+        👨‍⚕️ Doctor Support
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       QUICK HELP
+  ========================== -->
+  <section class="quick-help">
+
+    <div class="section-title">
+
+      <span>QUICK HELP</span>
+
+      <h2>
+        Choose what you
+        <strong>need help with</strong>
+      </h2>
+
+    </div>
+
+
+    <div class="help-cards">
+
+      <a href="#patient-guide" class="help-card">
+
+        <div class="help-card-icon patient">
+          👤
+        </div>
+
+        <h3>I'm a Patient</h3>
+
+        <p>
+          Learn how to register, give consent, complete your interview
+          and upload medical reports.
+        </p>
+
+        <span>Patient Guide →</span>
+
+      </a>
+
+
+      <a href="#doctor-guide" class="help-card">
+
+        <div class="help-card-icon doctor">
+          👨‍⚕️
+        </div>
+
+        <h3>I'm a Doctor</h3>
+
+        <p>
+          Learn how to access the patient queue, review summaries
+          and verify patient information.
+        </p>
+
+        <span>Doctor Guide →</span>
+
+      </a>
+
+
+      <a href="#voice-help" class="help-card">
+
+        <div class="help-card-icon voice">
+          🎤
+        </div>
+
+        <h3>Voice & Language</h3>
+
+        <p>
+          Learn how to use voice input and select your preferred
+          language.
+        </p>
+
+        <span>Voice Help →</span>
+
+      </a>
+
+
+      <a href="#reports-help" class="help-card">
+
+        <div class="help-card-icon report">
+          📄
+        </div>
+
+        <h3>Reports & OCR</h3>
+
+        <p>
+          Learn how to upload or scan prescriptions and medical
+          documents.
+        </p>
+
+        <span>Report Help →</span>
+
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       PATIENT GUIDE
+  ========================== -->
+  <section class="guide-section" id="patient-guide">
+
+    <div class="guide-heading">
+
+      <span class="section-label">
+        PATIENT GUIDE
+      </span>
+
+      <h2>
+        Your MediKiosk journey
+        <span>made simple.</span>
+      </h2>
+
+      <p>
+        Follow these steps to complete your patient information
+        before meeting the doctor.
+      </p>
+
+    </div>
+
+
+    <div class="steps-container">
+
+      <div class="guide-step">
+
+        <div class="step-icon">
+          📝
+        </div>
+
+        <div class="step-number">
+          01
+        </div>
+
+        <h3>Register</h3>
+
+        <p>
+          Enter your basic information to begin your MediKiosk session.
+        </p>
+
+      </div>
+
+
+      <div class="step-arrow">→</div>
+
+
+      <div class="guide-step">
+
+        <div class="step-icon">
+          🔐
+        </div>
+
+        <div class="step-number">
+          02
+        </div>
+
+        <h3>Give Consent</h3>
+
+        <p>
+          Review the information notice and provide the required consent.
+        </p>
+
+      </div>
+
+
+      <div class="step-arrow">→</div>
+
+
+      <div class="guide-step">
+
+        <div class="step-icon">
+          🎤
+        </div>
+
+        <div class="step-number">
+          03
+        </div>
+
+        <h3>Complete Interview</h3>
+
+        <p>
+          Answer the AI-guided questions using voice, text, or touch.
+        </p>
+
+      </div>
+
+
+      <div class="step-arrow">→</div>
+
+
+      <div class="guide-step">
+
+        <div class="step-icon">
+          📄
+        </div>
+
+        <div class="step-number">
+          04
+        </div>
+
+        <h3>Upload Reports</h3>
+
+        <p>
+          Add previous prescriptions, lab reports, or other documents.
+        </p>
+
+      </div>
+
+
+      <div class="step-arrow">→</div>
+
+
+      <div class="guide-step">
+
+        <div class="step-icon">
+          ✅
+        </div>
+
+        <div class="step-number">
+          05
+        </div>
+
+        <h3>Submit</h3>
+
+        <p>
+          Submit your information so the doctor can review it.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       DOCTOR GUIDE
+  ========================== -->
+  <section class="doctor-help-section" id="doctor-guide">
+
+    <div class="doctor-help-content">
+
+      <div class="doctor-help-icon">
+        👨‍⚕️
+      </div>
+
+      <span class="section-label">
+        CLINICIAN GUIDE
+      </span>
+
+      <h2>
+        Everything you need
+        <span>before consultation.</span>
+      </h2>
+
+      <p>
+        Doctors can access patient information from the secure
+        clinician area and review the AI-generated draft.
+      </p>
+
+      <div class="doctor-actions">
+
+        <div class="doctor-action">
+          <span>01</span>
+          <div>
+            <strong>Login</strong>
+            <small>Sign in to the clinician dashboard.</small>
+          </div>
+        </div>
+
+        <div class="doctor-action">
+          <span>02</span>
+          <div>
+            <strong>Open Patient Queue</strong>
+            <small>View patients ready for consultation.</small>
+          </div>
+        </div>
+
+        <div class="doctor-action">
+          <span>03</span>
+          <div>
+            <strong>Review Summary</strong>
+            <small>Check history, reports and timeline.</small>
+          </div>
+        </div>
+
+        <div class="doctor-action">
+          <span>04</span>
+          <div>
+            <strong>Edit & Verify</strong>
+            <small>Correct information and confirm the draft.</small>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="doctor-dashboard-preview">
+
+      <div class="preview-header">
+        <div>
+          <strong>Patient Summary</strong>
+          <small>Ready for Review</small>
+        </div>
+
+        <span class="verified-badge">
+          ● Ready
+        </span>
+      </div>
+
+      <div class="preview-patient">
+        <div class="patient-avatar">
+          👤
+        </div>
+
+        <div>
+          <strong>Patient History</strong>
+          <small>AI-assisted summary</small>
+        </div>
+      </div>
+
+      <div class="preview-row">
+        <span>Chief Complaint</span>
+        <strong>View</strong>
+      </div>
+
+      <div class="preview-row">
+        <span>Medical History</span>
+        <strong>View</strong>
+      </div>
+
+      <div class="preview-row">
+        <span>Medications</span>
+        <strong>View</strong>
+      </div>
+
+      <div class="preview-row">
+        <span>Reports</span>
+        <strong>3 Documents</strong>
+      </div>
+
+      <button class="preview-button">
+        Review Summary →
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       VOICE + REPORT HELP
+  ========================== -->
+  <section class="tips-section">
+
+    <div class="tip-card" id="voice-help">
+
+      <div class="tip-icon">
+        🎤
+      </div>
+
+      <div>
+
+        <span>VOICE INPUT</span>
+
+        <h3>Having trouble with voice input?</h3>
+
+        <ul>
+          <li>✓ Allow microphone access in your browser.</li>
+          <li>✓ Speak clearly and at a normal speed.</li>
+          <li>✓ Use a quiet environment when possible.</li>
+          <li>✓ You can always use text input instead.</li>
+        </ul>
+
+      </div>
+
+    </div>
+
+
+    <div class="tip-card" id="reports-help">
+
+      <div class="tip-icon report-icon">
+        📄
+      </div>
+
+      <div>
+
+        <span>REPORT UPLOAD</span>
+
+        <h3>Tips for better document scanning</h3>
+
+        <ul>
+          <li>✓ Keep the document flat and visible.</li>
+          <li>✓ Use a clear and well-lit image.</li>
+          <li>✓ Avoid blurry or cropped documents.</li>
+          <li>✓ Check extracted information before submission.</li>
+        </ul>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       FAQ
+  ========================== -->
+  <section class="faq-section">
+
+    <div class="section-title center">
+
+      <span>FAQ</span>
+
+      <h2>
+        Frequently asked
+        <strong>questions</strong>
+      </h2>
+
+    </div>
+
+
+    <div class="faq-container">
+
+      <div class="faq-item">
+
+        <button class="faq-question">
+          <span>What is MediKiosk?</span>
+          <span class="faq-plus">+</span>
+        </button>
+
+        <div class="faq-answer">
+          MediKiosk is an AI-assisted patient case-taking platform
+          designed to collect and organize patient information before
+          consultation.
+        </div>
+
+      </div>
+
+
+      <div class="faq-item">
+
+        <button class="faq-question">
+          <span>Can I use MediKiosk without voice?</span>
+          <span class="faq-plus">+</span>
+        </button>
+
+        <div class="faq-answer">
+          Yes. Voice input is optional. Patients can use text or
+          touchscreen interaction when voice input is unavailable.
+        </div>
+
+      </div>
+
+
+      <div class="faq-item">
+
+        <button class="faq-question">
+          <span>What languages are supported?</span>
+          <span class="faq-plus">+</span>
+        </button>
+
+        <div class="faq-answer">
+          The MediKiosk prototype can support English, Hindi and
+          Marathi interfaces and interactions.
+        </div>
+
+      </div>
+
+
+      <div class="faq-item">
+
+        <button class="faq-question">
+          <span>Can MediKiosk read medical reports?</span>
+          <span class="faq-plus">+</span>
+        </button>
+
+        <div class="faq-answer">
+          Medical documents can be uploaded and processed using OCR
+          to extract useful information. Extracted information should
+          be checked before being used clinically.
+        </div>
+
+      </div>
+
+
+      <div class="faq-item">
+
+        <button class="faq-question">
+          <span>Does AI replace the doctor?</span>
+          <span class="faq-plus">+</span>
+        </button>
+
+        <div class="faq-answer">
+          No. MediKiosk is designed to assist with information
+          collection and organization. The doctor reviews, edits and
+          verifies the information.
+        </div>
+
+      </div>
+
+
+      <div class="faq-item">
+
+        <button class="faq-question">
+          <span>What should I do if something is incorrect?</span>
+          <span class="faq-plus">+</span>
+        </button>
+
+        <div class="faq-answer">
+          Review the information and tell the clinician about any
+          missing or incorrect details. The doctor can edit and
+          verify the final summary.
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       SUPPORT CTA
+  ========================== -->
+  <section class="support-section">
+
+    <div class="support-content">
+
+      <div class="support-badge">
+        💙 Need more assistance?
+      </div>
+
+      <h2>
+        We're here to make
+        <span>MediKiosk easy.</span>
+      </h2>
+
+      <p>
+        If you cannot find the answer you need, please contact
+        your hospital support team or MediKiosk administrator.
+      </p>
+
+      <a
+        href="{{ url_for('main.index') }}"
+        class="support-button"
+      >
+        Back to Home →
+      </a>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<script>
+
+/* =========================
+   FAQ ACCORDION
+========================= */
+
+document.querySelectorAll(".faq-question").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    const item = button.parentElement;
+
+    document.querySelectorAll(".faq-item").forEach(other => {
+
+      if (other !== item) {
+        other.classList.remove("active");
+      }
+
+    });
+
+    item.classList.toggle("active");
+
+  });
+
+});
+
+
+/* =========================
+   HELP SEARCH
+========================= */
+
+function searchHelp() {
+
+  const input =
+    document.getElementById("helpSearch");
+
+  const query =
+    input.value.toLowerCase().trim();
+
+  const cards =
+    document.querySelectorAll(
+      ".help-card, .faq-item, .tip-card"
+    );
+
+  cards.forEach(card => {
+
+    const text =
+      card.innerText.toLowerCase();
+
+    if (!query || text.includes(query)) {
+
+      card.style.display = "";
+
+    } else {
+
+      card.style.display = "none";
+
+    }
+
+  });
+
+}
+
+</script>
+
+
+<style>
+
+/* =================================
+   HELP PAGE
+================================= */
+
+.help-page {
+
+  --blue: #2563eb;
+  --green: #10b981;
+  --dark: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(37,99,235,.08),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 15%,
+      rgba(16,185,129,.08),
+      transparent 30%
+    ),
+    #f8fafc;
+
+  color: var(--dark);
+
+  overflow: hidden;
+}
+
+
+/* =================================
+   HERO
+================================= */
+
+.help-hero {
+
+  max-width: 1200px;
+
+  margin: auto;
+
+  padding: 80px 25px;
+
+  display: grid;
+
+  grid-template-columns: 1.1fr .9fr;
+
+  align-items: center;
+
+  gap: 50px;
+
+}
+
+.help-badge {
+
+  display: inline-flex;
+
+  padding: 9px 16px;
+
+  border-radius: 50px;
+
+  background: #ecfdf5;
+
+  color: #047857;
+
+  border: 1px solid #bbf7d0;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+}
+
+.help-hero h1 {
+
+  margin: 22px 0 15px;
+
+  font-size: clamp(45px, 6vw, 72px);
+
+  line-height: 1;
+
+  letter-spacing: -3px;
+
+}
+
+.help-hero h1 span {
+
+  display: block;
+
+  background:
+
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #10b981
+    );
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+
+}
+
+.help-hero p {
+
+  max-width: 650px;
+
+  color: var(--muted);
+
+  font-size: 17px;
+
+  line-height: 1.8;
+
+}
+
+
+/* SEARCH */
+
+.help-search {
+
+  max-width: 600px;
+
+  margin-top: 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 7px 18px;
+
+  border-radius: 15px;
+
+  background: white;
+
+  border: 1px solid var(--border);
+
+  box-shadow:
+    0 15px 35px rgba(15,23,42,.07);
+
+}
+
+.help-search span {
+
+  font-size: 20px;
+
+}
+
+.help-search input {
+
+  width: 100%;
+
+  padding: 14px 0;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  font-size: 14px;
+
+}
+
+
+/* =================================
+   HERO VISUAL
+================================= */
+
+.help-hero-visual {
+
+  position: relative;
+
+  height: 400px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+.support-circle {
+
+  width: 210px;
+
+  height: 210px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  background: white;
+
+  border: 10px solid #eff6ff;
+
+  box-shadow:
+    0 25px 70px rgba(15,23,42,.12);
+
+  z-index: 2;
+
+}
+
+.support-icon {
+
+  width: 65px;
+
+  height: 65px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin-bottom: 12px;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #10b981
+    );
+
+  color: white;
+
+  font-size: 30px;
+
+}
+
+.support-circle strong {
+
+  font-size: 17px;
+
+}
+
+.support-circle small {
+
+  margin-top: 4px;
+
+  color: var(--muted);
+
+  font-size: 11px;
+
+}
+
+.floating-help-card {
+
+  position: absolute;
+
+  padding: 13px 17px;
+
+  border-radius: 13px;
+
+  background: white;
+
+  border: 1px solid var(--border);
+
+  box-shadow:
+    0 15px 35px rgba(15,23,42,.10);
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+}
+
+.card-one {
+
+  top: 35px;
+
+  left: 20px;
+
+  animation: helpFloat 4s infinite;
+
+}
+
+.card-two {
+
+  top: 130px;
+
+  right: 0;
+
+  animation: helpFloat 4s .8s infinite;
+
+}
+
+.card-three {
+
+  bottom: 40px;
+
+  left: 35px;
+
+  animation: helpFloat 4s 1.5s infinite;
+
+}
+
+@keyframes helpFloat {
+
+  50% {
+
+    transform: translateY(-8px);
+
+  }
+
+}
+
+
+/* =================================
+   SECTION TITLE
+================================= */
+
+.quick-help,
+.guide-section,
+.tips-section,
+.faq-section {
+
+  max-width: 1200px;
+
+  margin: auto;
+
+  padding: 90px 25px;
+
+}
+
+.section-title {
+
+  margin-bottom: 45px;
+
+}
+
+.section-title.center {
+
+  text-align: center;
+
+}
+
+.section-title > span,
+.guide-heading > span {
+
+  color: #0f766e;
+
+  font-size: 11px;
+
+  font-weight: 900;
+
+  letter-spacing: 2px;
+
+}
+
+.section-title h2,
+.guide-heading h2 {
+
+  margin: 12px 0;
+
+  font-size: clamp(32px, 5vw, 48px);
+
+  line-height: 1.1;
+
+  letter-spacing: -1.5px;
+
+}
+
+.section-title strong,
+.guide-heading h2 span {
+
+  color: #0f766e;
+
+}
+
+
+/* =================================
+   HELP CARDS
+================================= */
+
+.help-cards {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 18px;
+
+}
+
+.help-card {
+
+  padding: 28px;
+
+  border-radius: 22px;
+
+  background: white;
+
+  border: 1px solid var(--border);
+
+  text-decoration: none;
+
+  color: var(--dark);
+
+  transition: .3s ease;
+
+}
+
+.help-card:hover {
+
+  transform: translateY(-7px);
+
+  box-shadow:
+    0 25px 55px rgba(15,23,42,.09);
+
+}
+
+.help-card-icon {
+
+  width: 55px;
+
+  height: 55px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin-bottom: 20px;
+
+  border-radius: 16px;
+
+  background: #eff6ff;
+
+  font-size: 25px;
+
+}
+
+.help-card-icon.doctor {
+
+  background: #ecfdf5;
+
+}
+
+.help-card-icon.voice {
+
+  background: #f5f3ff;
+
+}
+
+.help-card-icon.report {
+
+  background: #fffbeb;
+
+}
+
+.help-card h3 {
+
+  margin-bottom: 10px;
+
+  font-size: 18px;
+
+}
+
+.help-card p {
+
+  color: var(--muted);
+
+  font-size: 13px;
+
+  line-height: 1.65;
+
+  min-height: 65px;
+
+}
+
+.help-card > span {
+
+  color: #2563eb;
+
+  font-size: 11px;
+
+  font-weight: 900;
+
+}
+
+
+/* =================================
+   PATIENT GUIDE
+================================= */
+
+.guide-section {
+
+  max-width: none;
+
+  background: white;
+
+}
+
+.guide-section > * {
+
+  max-width: 1200px;
+
+  margin-left: auto;
+
+  margin-right: auto;
+
+}
+
+.guide-heading {
+
+  margin-bottom: 45px;
+
+}
+
+.guide-heading p {
+
+  color: var(--muted);
+
+  max-width: 650px;
+
+  line-height: 1.7;
+
+}
+
+.steps-container {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+.guide-step {
+
+  position: relative;
+
+  width: 175px;
+
+  min-height: 190px;
+
+  padding: 25px 18px;
+
+  text-align: center;
+
+  border-radius: 20px;
+
+  background: #f8fafc;
+
+  border: 1px solid var(--border);
+
+}
+
+.step-icon {
+
+  width: 55px;
+
+  height: 55px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin: auto;
+
+  border-radius: 16px;
+
+  background: #eff6ff;
+
+  font-size: 25px;
+
+}
+
+.step-number {
+
+  position: absolute;
+
+  top: -9px;
+
+  right: 10px;
+
+  padding: 4px 7px;
+
+  border-radius: 20px;
+
+  color: white;
+
+  background: #0f766e;
+
+  font-size: 9px;
+
+  font-weight: 900;
+
+}
+
+.guide-step h3 {
+
+  margin: 14px 0 7px;
+
+  font-size: 15px;
+
+}
+
+.guide-step p {
+
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 11px;
+
+  line-height: 1.5;
+
+}
+
+.step-arrow {
+
+  width: 40px;
+
+  text-align: center;
+
+  color: #2563eb;
+
+  font-size: 22px;
+
+  font-weight: 900;
+
+}
+
+
+/* =================================
+   DOCTOR SECTION
+================================= */
+
+.doctor-help-section {
+
+  max-width: 1200px;
+
+  margin: 80px auto;
+
+  padding: 60px;
+
+  display: grid;
+
+  grid-template-columns: 1.1fr .9fr;
+
+  gap: 60px;
+
+  align-items: center;
+
+  border-radius: 30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0f172a,
+      #134e4a
+    );
+
+  color: white;
+
+}
+
+.doctor-help-icon {
+
+  width: 58px;
+
+  height: 58px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin-bottom: 20px;
+
+  border-radius: 17px;
+
+  background: rgba(255,255,255,.1);
+
+  font-size: 27px;
+
+}
+
+.doctor-help-content .section-label {
+
+  color: #5eead4;
+
+}
+
+.doctor-help-content h2 {
+
+  margin: 12px 0;
+
+  font-size: clamp(32px, 5vw, 50px);
+
+  line-height: 1.1;
+
+}
+
+.doctor-help-content h2 span {
+
+  color: #5eead4;
+
+}
+
+.doctor-help-content > p {
+
+  max-width: 600px;
+
+  color: #cbd5e1;
+
+  line-height: 1.7;
+
+}
+
+.doctor-actions {
+
+  display: grid;
+
+  gap: 12px;
+
+  margin-top: 28px;
+
+}
+
+.doctor-action {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 12px;
+
+  border-radius: 13px;
+
+  background: rgba(255,255,255,.06);
+
+}
+
+.doctor-action > span {
+
+  width: 28px;
+
+  height: 28px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 8px;
+
+  background: rgba(255,255,255,.08);
+
+  color: #5eead4;
+
+  font-size: 9px;
+
+  font-weight: 900;
+
+}
+
+.doctor-action strong {
+
+  display: block;
+
+  font-size: 12px;
+
+}
+
+.doctor-action small {
+
+  color: #94a3b8;
+
+  font-size: 9px;
+
+}
+
+
+/* DASHBOARD PREVIEW */
+
+.doctor-dashboard-preview {
+
+  padding: 22px;
+
+  border-radius: 22px;
+
+  background: white;
+
+  color: var(--dark);
+
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.20);
+
+}
+
+.preview-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding-bottom: 18px;
+
+  border-bottom: 1px solid var(--border);
+
+}
+
+.preview-header strong {
+
+  display: block;
+
+  font-size: 14px;
+
+}
+
+.preview-header small {
+
+  color: var(--muted);
+
+  font-size: 9px;
+
+}
+
+.verified-badge {
+
+  padding: 6px 9px;
+
+  border-radius: 20px;
+
+  background: #ecfdf5;
+
+  color: #047857;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+}
+
+.preview-patient {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 20px 0;
+
+}
+
+.patient-avatar {
+
+  width: 45px;
+
+  height: 45px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 13px;
+
+  background: #eff6ff;
+
+}
+
+.preview-patient strong {
+
+  display: block;
+
+  font-size: 12px;
+
+}
+
+.preview-patient small {
+
+  color: var(--muted);
+
+  font-size: 9px;
+
+}
+
+.preview-row {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  padding: 12px 0;
+
+  border-top: 1px solid #f1f5f9;
+
+  font-size: 10px;
+
+}
+
+.preview-row span {
+
+  color: var(--muted);
+
+}
+
+.preview-row strong {
+
+  color: #2563eb;
+
+}
+
+.preview-button {
+
+  width: 100%;
+
+  margin-top: 15px;
+
+  padding: 12px;
+
+  border: none;
+
+  border-radius: 11px;
+
+  background: #0f766e;
+
+  color: white;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+}
+
+
+/* =================================
+   TIPS
+================================= */
+
+.tips-section {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 20px;
+
+}
+
+.tip-card {
+
+  display: flex;
+
+  gap: 20px;
+
+  padding: 30px;
+
+  border-radius: 22px;
+
+  background: white;
+
+  border: 1px solid var(--border);
+
+}
+
+.tip-icon {
+
+  min-width: 55px;
+
+  height: 55px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 16px;
+
+  background: #f5f3ff;
+
+  font-size: 25px;
+
+}
+
+.report-icon {
+
+  background: #fffbeb;
+
+}
+
+.tip-card > div > span {
+
+  color: #0f766e;
+
+  font-size: 10px;
+
+  font-weight: 900;
+
+  letter-spacing: 1px;
+
+}
+
+.tip-card h3 {
+
+  margin: 8px 0 15px;
+
+  font-size: 18px;
+
+}
+
+.tip-card ul {
+
+  margin: 0;
+
+  padding: 0;
+
+  display: grid;
+
+  gap: 9px;
+
+  list-style: none;
+
+}
+
+.tip-card li {
+
+  color: #64748b;
+
+  font-size: 11px;
+
+}
+
+
+/* =================================
+   FAQ
+================================= */
+
+.faq-section {
+
+  max-width: none;
+
+  background: white;
+
+}
+
+.faq-section > * {
+
+  max-width: 850px;
+
+  margin-left: auto;
+
+  margin-right: auto;
+
+}
+
+.faq-container {
+
+  display: grid;
+
+  gap: 10px;
+
+}
+
+.faq-item {
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+}
+
+.faq-question {
+
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 18px 20px;
+
+  border: none;
+
+  background: white;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  color: var(--dark);
+
+}
+
+.faq-plus {
+
+  font-size: 20px;
+
+  color: #2563eb;
+
+  transition: .25s ease;
+
+}
+
+.faq-answer {
+
+  max-height: 0;
+
+  overflow: hidden;
+
+  padding: 0 20px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+
+  line-height: 1.7;
+
+  transition: .3s ease;
+
+}
+
+.faq-item.active .faq-answer {
+
+  max-height: 150px;
+
+  padding-bottom: 18px;
+
+}
+
+.faq-item.active .faq-plus {
+
+  transform: rotate(45deg);
+
+}
+
+
+/* =================================
+   SUPPORT CTA
+================================= */
+
+.support-section {
+
+  max-width: 1200px;
+
+  margin: 20px auto 80px;
+
+  padding: 65px 30px;
+
+  text-align: center;
+
+  border-radius: 30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #dbeafe,
+      #ccfbf1
+    );
+
+}
+
+.support-badge {
+
+  display: inline-block;
+
+  padding: 8px 13px;
+
+  border-radius: 50px;
+
+  background: white;
+
+  color: #0f766e;
+
+  font-size: 10px;
+
+  font-weight: 900;
+
+}
+
+.support-section h2 {
+
+  margin: 18px 0 10px;
+
+  font-size: clamp(32px, 5vw, 48px);
+
+  line-height: 1.1;
+
+}
+
+.support-section h2 span {
+
+  color: #0f766e;
+
+}
+
+.support-section p {
+
+  max-width: 650px;
+
+  margin: auto;
+
+  color: #475569;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+
+}
+
+.support-button {
+
+  display: inline-block;
+
+  margin-top: 25px;
+
+  padding: 13px 22px;
+
+  border-radius: 12px;
+
+  background: #0f766e;
+
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  transition: .25s ease;
+
+}
+
+.support-button:hover {
+
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 15px 30px rgba(15,118,110,.2);
+
+}
+
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 1000px) {
+
+  .help-hero {
+
+    grid-template-columns: 1fr;
+
+    text-align: center;
+
+  }
+
+  .help-hero p,
+  .help-search {
+
+    margin-left: auto;
+    margin-right: auto;
+
+  }
+
+  .help-hero-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+  }
+
+  .help-cards {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+
+  }
+
+  .doctor-help-section {
+
+    margin-left: 20px;
+    margin-right: 20px;
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .steps-container {
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+  }
+
+  .step-arrow {
+
+    display: none;
+
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .help-hero {
+
+    padding: 55px 18px;
+
+  }
+
+  .help-cards {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .help-hero-visual {
+
+    transform: scale(.85);
+
+  }
+
+  .tips-section {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .doctor-help-section {
+
+    padding: 35px 25px;
+
+  }
+
+  .quick-help,
+  .guide-section,
+  .tips-section,
+  .faq-section {
+
+    padding: 65px 18px;
+
+  }
+
+  .support-section {
+
+    margin-left: 18px;
+    margin-right: 18px;
+
+    padding: 50px 22px;
+
+  }
+
+}
+
+</style>
+
 {% endblock %}

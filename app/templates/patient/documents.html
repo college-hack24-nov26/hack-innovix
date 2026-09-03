@@ -1,30 +1,691 @@
 {% extends "base.html" %}
-{% block extra_js %}<script type="module" src="{{ url_for('static', filename='js/documents.js') }}"></script>{% endblock %}
+
+{% block extra_css %}
+<style>
+
+/* =====================================================
+   DOCUMENTS / UPLOAD REPORTS PAGE
+   Clean • Professional • Minimal Color
+===================================================== */
+
+.patient-shell {
+    width: min(900px, 92%);
+
+    margin: 45px auto 110px;
+
+    padding: 40px 45px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 35px rgba(15, 23, 42, 0.08);
+
+    animation: documentsFade 0.45s ease;
+}
+
+
+/* =====================================================
+   PAGE TITLE
+===================================================== */
+
+.patient-shell > h1 {
+    margin: 0 0 28px;
+
+    color: #1e293b;
+
+    font-size: clamp(1.9rem, 4vw, 2.5rem);
+
+    font-weight: 750;
+
+    letter-spacing: -0.8px;
+}
+
+
+/* =====================================================
+   UPLOAD / DROPZONE
+===================================================== */
+
+#dropzone {
+    position: relative;
+
+    padding: 35px 30px;
+
+    margin-bottom: 30px;
+
+    text-align: center;
+
+    background: #f8fafc;
+
+    border: 2px dashed #cbd5e1;
+
+    border-radius: 16px;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* Upload icon */
+
+#dropzone::before {
+    content: "↑";
+
+    width: 55px;
+    height: 55px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eff6ff;
+
+    border: 1px solid #bfdbfe;
+
+    border-radius: 50%;
+
+    color: #2563eb;
+
+    font-size: 26px;
+
+    font-weight: 700;
+}
+
+
+/* Dropzone hover */
+
+#dropzone:hover {
+    background: #f8fafc;
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 6px 18px rgba(37, 99, 235, 0.08);
+}
+
+
+/* =====================================================
+   DROPZONE TEXT
+===================================================== */
+
+#dropzone > p {
+    margin: 0 0 20px;
+
+    color: #475569;
+
+    font-size: 0.98rem;
+
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   FILE INPUT
+===================================================== */
+
+#file-input {
+    width: min(100%, 400px);
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #334155;
+
+    font-family: inherit;
+
+    font-size: 0.9rem;
+
+    cursor: pointer;
+}
+
+
+/* File selector button */
+
+#file-input::file-selector-button {
+    margin-right: 10px;
+
+    padding: 9px 14px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    color: #334155;
+
+    font-family: inherit;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+#file-input::file-selector-button:hover {
+    background: #f1f5f9;
+
+    border-color: #94a3b8;
+}
+
+
+/* =====================================================
+   UPLOAD PROGRESS
+===================================================== */
+
+#upload-progress {
+    display: block;
+
+    width: min(100%, 500px);
+
+    height: 8px;
+
+    margin: 22px auto 0;
+
+    accent-color: #2563eb;
+}
+
+
+/* =====================================================
+   DOCUMENT CARDS
+===================================================== */
+
+.patient-shell > article.card {
+    position: relative;
+
+    margin-top: 18px;
+
+    padding: 25px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 5px 18px rgba(15, 23, 42, 0.05);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.patient-shell > article.card:hover {
+    border-color: #cbd5e1;
+
+    box-shadow:
+        0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+
+/* =====================================================
+   DOCUMENT NAME
+===================================================== */
+
+.patient-shell > article.card h3 {
+    margin: 0 0 8px;
+
+    color: #1e293b;
+
+    font-size: 1.1rem;
+
+    font-weight: 700;
+
+    word-break: break-word;
+}
+
+
+/* =====================================================
+   DOCUMENT STATUS
+===================================================== */
+
+.patient-shell > article.card > p {
+    margin: 0 0 20px;
+
+    color: #64748b;
+
+    font-size: 0.9rem;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   EXTRACTION FORM
+===================================================== */
+
+.patient-shell > article.card form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+
+/* =====================================================
+   EXTRACTION LABEL
+===================================================== */
+
+.patient-shell > article.card form label {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    color: #334155;
+
+    font-size: 0.9rem;
+
+    font-weight: 650;
+}
+
+
+/* =====================================================
+   EXTRACTION INPUT
+===================================================== */
+
+.patient-shell > article.card form input:not([type="hidden"]) {
+    width: 100%;
+
+    min-height: 45px;
+
+    padding: 10px 13px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #1e293b;
+
+    font-family: inherit;
+
+    font-size: 0.95rem;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.patient-shell > article.card form input:not([type="hidden"]):hover {
+    border-color: #94a3b8;
+}
+
+
+.patient-shell > article.card form input:not([type="hidden"]):focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* =====================================================
+   CONFIRM BUTTON
+===================================================== */
+
+.patient-shell > article.card form .btn-primary {
+    align-self: flex-start;
+
+    min-width: 130px;
+
+    min-height: 45px;
+
+    margin-top: 5px;
+
+    padding: 10px 20px;
+
+    border: none !important;
+
+    border-radius: 9px;
+
+    background: #2563eb !important;
+
+    color: #ffffff !important;
+
+    font-family: inherit;
+
+    font-size: 0.92rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 15px rgba(37, 99, 235, 0.16);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.patient-shell > article.card form .btn-primary:hover {
+    background: #1d4ed8 !important;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.23);
+}
+
+
+.patient-shell > article.card form .btn-primary:active {
+    transform: translateY(0);
+}
+
+
+/* =====================================================
+   PROCESSING STATE
+===================================================== */
+
+.patient-shell > article.card form > p {
+    margin: 5px 0;
+
+    color: #64748b;
+
+    font-size: 0.9rem;
+
+    font-style: italic;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.patient-shell .empty {
+    margin: 30px 0 10px;
+
+    padding: 28px;
+
+    text-align: center;
+
+    color: #64748b;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+
+    font-size: 0.95rem;
+}
+
+
+/* =====================================================
+   FOCUS ACCESSIBILITY
+===================================================== */
+
+.patient-shell button:focus-visible,
+.patient-shell input:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.20);
+
+    outline-offset: 2px;
+}
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes documentsFade {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .patient-shell {
+        width: 92%;
+
+        padding: 32px 27px;
+
+        margin-top: 30px;
+
+        border-radius: 18px;
+    }
+
+    #dropzone {
+        padding: 30px 22px;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .patient-shell {
+        width: 94%;
+
+        padding: 27px 18px;
+
+        margin: 22px auto 95px;
+
+        border-radius: 16px;
+    }
+
+    .patient-shell > h1 {
+        font-size: 1.8rem;
+
+        margin-bottom: 22px;
+    }
+
+    #dropzone {
+        padding: 27px 15px;
+
+        border-radius: 13px;
+    }
+
+    #dropzone::before {
+        width: 48px;
+        height: 48px;
+
+        font-size: 22px;
+    }
+
+    #dropzone > p {
+        font-size: 0.9rem;
+    }
+
+    #file-input {
+        width: 100%;
+
+        font-size: 0.82rem;
+    }
+
+    .patient-shell > article.card {
+        padding: 20px;
+
+        border-radius: 12px;
+    }
+
+    .patient-shell > article.card h3 {
+        font-size: 1rem;
+    }
+
+    .patient-shell > article.card form .btn-primary {
+        width: 100%;
+
+        min-height: 48px;
+    }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .patient-shell {
+        animation: none;
+    }
+
+    #dropzone,
+    .patient-shell > article.card,
+    .patient-shell button,
+    .patient-shell input {
+        transition: none;
+    }
+
+}
+
+</style>
+{% endblock %}
+
+
+{% block extra_js %}
+<script type="module" src="{{ url_for('static', filename='js/documents.js') }}"></script>
+{% endblock %}
+
+
 {% block content %}
+
 <div class="patient-shell">
+
   <h1>{{ _('upload_reports') }}</h1>
+
   <div class="card" id="dropzone">
-    <p>Drop a PDF, JPG, or PNG, or choose a file.</p>
-    <input id="file-input" type="file" accept=".pdf,.jpg,.jpeg,.png,image/*" capture="environment" aria-label="Choose file">
-    <progress id="upload-progress" max="100" value="0" hidden></progress>
+
+    <p>
+      Drop a PDF, JPG, or PNG, or choose a file.
+    </p>
+
+    <input
+      id="file-input"
+      type="file"
+      accept=".pdf,.jpg,.jpeg,.png,image/*"
+      capture="environment"
+      aria-label="Choose file">
+
+    <progress
+      id="upload-progress"
+      max="100"
+      value="0"
+      hidden>
+    </progress>
+
   </div>
+
+
   {% for doc in documents %}
+
     <article class="card">
-      <h3>{{ doc.filename }}</h3>
-      <p>{{ doc.category }} · {{ doc.status }}</p>
-      <form method="post" action="{{ url_for('documents.confirm_extraction', doc_id=doc.id) }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <h3>
+        {{ doc.filename }}
+      </h3>
+
+      <p>
+        {{ doc.category }} · {{ doc.status }}
+      </p>
+
+
+      <form
+        method="post"
+        action="{{ url_for('documents.confirm_extraction', doc_id=doc.id) }}">
+
+        <input
+          type="hidden"
+          name="csrf_token"
+          value="{{ csrf_token() }}">
+
+
         {% for ext in doc.extractions %}
-          <label>{{ ext.field_name }} <input name="field_{{ ext.id }}" value="{{ ext.field_value }}"></label>
+
+          <label>
+            {{ ext.field_name }}
+
+            <input
+              name="field_{{ ext.id }}"
+              value="{{ ext.field_value }}">
+          </label>
+
         {% else %}
-          <p>Processing…</p>
+
+          <p>
+            Processing…
+          </p>
+
         {% endfor %}
-        <button class="btn btn-primary" type="submit">Confirm</button>
+
+
+        <button
+          class="btn btn-primary"
+          type="submit">
+          Confirm
+        </button>
+
       </form>
+
     </article>
+
   {% else %}
-    <p class="empty">No documents yet.</p>
+
+    <p class="empty">
+      No documents yet.
+    </p>
+
   {% endfor %}
+
 </div>
+
+
 {% include "components/patient_bottom_nav.html" %}
+
 {% endblock %}

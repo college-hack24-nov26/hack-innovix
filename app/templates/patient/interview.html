@@ -1,27 +1,700 @@
 {% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+
+/* =====================================================
+   INTERVIEW PAGE
+   Clean • Professional • Minimal Color
+===================================================== */
+
+.patient-shell {
+    width: min(900px, 92%);
+    margin: 40px auto 110px;
+}
+
+
+/* =====================================================
+   INTERVIEW CARD
+===================================================== */
+
+.interview-card {
+    width: 100%;
+    padding: 42px 45px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 35px rgba(15, 23, 42, 0.08);
+
+    box-sizing: border-box;
+
+    animation: interviewFade 0.45s ease;
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+.interview-card h1 {
+    margin: 0 0 10px;
+
+    color: #1e293b;
+
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 750;
+
+    letter-spacing: -0.7px;
+}
+
+
+/* =====================================================
+   SECTION TEXT
+===================================================== */
+
+#q-section {
+    margin: 0 0 20px;
+
+    color: #64748b;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   PROGRESS BAR
+===================================================== */
+
+.progress-wrap {
+    width: 100%;
+    height: 9px;
+
+    margin: 0 0 35px;
+
+    background: #e2e8f0;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+
+    background: #2563eb;
+
+    border-radius: 20px;
+
+    transition: width 0.4s ease;
+}
+
+
+/* =====================================================
+   QUESTION
+===================================================== */
+
+#q-prompt {
+    margin: 0 0 25px;
+
+    color: #1e293b;
+
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
+
+    line-height: 1.45;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   VOICE CONTROLS
+===================================================== */
+
+.voice-row {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+}
+
+
+/* Microphone */
+
+.mic {
+    width: 58px;
+    height: 58px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 50%;
+
+    background: #f8fafc;
+
+    color: #1e293b;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.mic:hover {
+    background: #f1f5f9;
+
+    border-color: #94a3b8;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 6px 15px rgba(15, 23, 42, 0.10);
+}
+
+.mic:active {
+    transform: scale(0.96);
+}
+
+
+/* Listen button */
+
+#speak-btn {
+    min-height: 48px;
+
+    padding: 10px 20px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #334155;
+
+    font-size: 0.95rem;
+
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+#speak-btn:hover {
+    background: #f8fafc;
+
+    border-color: #94a3b8;
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   VOICE HINT
+===================================================== */
+
+#voice-hint {
+    margin: -5px 0 15px;
+
+    color: #64748b;
+
+    font-size: 0.88rem;
+}
+
+
+/* =====================================================
+   TEXTAREA
+===================================================== */
+
+#q-input {
+    display: block;
+
+    width: 100%;
+
+    min-height: 125px;
+
+    padding: 17px 18px;
+
+    box-sizing: border-box;
+
+    resize: vertical;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    color: #1e293b;
+
+    font-family: inherit;
+
+    font-size: 1rem;
+
+    line-height: 1.55;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#q-input::placeholder {
+    color: #94a3b8;
+}
+
+#q-input:hover {
+    border-color: #94a3b8;
+}
+
+#q-input:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* =====================================================
+   OR TEXT
+===================================================== */
+
+.interview-card > p {
+    color: #64748b;
+
+    font-size: 0.9rem;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   QUICK ANSWER CHIPS
+===================================================== */
+
+.chips {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin: 15px 0 20px;
+}
+
+
+/*
+   These styles work with dynamically-created
+   chip buttons from patient/interview.js
+*/
+
+.chips button,
+.chips .chip {
+    padding: 9px 16px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    color: #334155;
+
+    font-family: inherit;
+
+    font-size: 0.9rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.chips button:hover,
+.chips .chip:hover {
+    background: #f1f5f9;
+
+    border-color: #94a3b8;
+
+    color: #1e293b;
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   QUESTION COUNTER
+===================================================== */
+
+#q-counter {
+    margin: 8px 0 20px;
+
+    color: #64748b;
+
+    font-size: 0.88rem;
+
+    font-weight: 600;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   EMERGENCY / ALERT BANNER
+===================================================== */
+
+#emergency-banner {
+    margin: 20px 0;
+
+    padding: 15px 17px;
+
+    border: 1px solid #fecaca;
+
+    border-radius: 10px;
+
+    background: #fef2f2;
+
+    color: #991b1b;
+
+    font-size: 0.92rem;
+
+    line-height: 1.5;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   CONTINUE BUTTON
+===================================================== */
+
+#next-btn {
+    display: block;
+
+    width: 100%;
+
+    min-height: 55px;
+
+    margin-top: 25px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 18px rgba(37, 99, 235, 0.18);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#next-btn:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 22px rgba(37, 99, 235, 0.24);
+}
+
+#next-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =====================================================
+   KEYBOARD FOCUS
+===================================================== */
+
+.interview-card button:focus-visible,
+.interview-card textarea:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.20);
+
+    outline-offset: 2px;
+}
+
+
+/* =====================================================
+   PAGE ANIMATION
+===================================================== */
+
+@keyframes interviewFade {
+
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .patient-shell {
+        width: 92%;
+
+        margin-top: 30px;
+    }
+
+    .interview-card {
+        padding: 32px 28px;
+
+        border-radius: 18px;
+    }
+
+    #q-prompt {
+        font-size: 1.4rem;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .patient-shell {
+        width: 94%;
+
+        margin: 20px auto 95px;
+    }
+
+    .interview-card {
+        padding: 27px 19px;
+
+        border-radius: 16px;
+    }
+
+    .interview-card h1 {
+        font-size: 1.75rem;
+    }
+
+    #q-section {
+        font-size: 0.88rem;
+    }
+
+    .progress-wrap {
+        height: 8px;
+
+        margin-bottom: 28px;
+    }
+
+    #q-prompt {
+        font-size: 1.25rem;
+
+        line-height: 1.4;
+    }
+
+    .voice-row {
+        gap: 10px;
+    }
+
+    .mic {
+        width: 52px;
+        height: 52px;
+
+        font-size: 20px;
+    }
+
+    #speak-btn {
+        min-height: 44px;
+
+        padding: 9px 15px;
+    }
+
+    #q-input {
+        min-height: 115px;
+
+        padding: 14px;
+
+        font-size: 0.95rem;
+    }
+
+    .chips {
+        gap: 8px;
+    }
+
+    .chips button,
+    .chips .chip {
+        padding: 8px 13px;
+
+        font-size: 0.85rem;
+    }
+
+    #next-btn {
+        min-height: 52px;
+
+        margin-top: 20px;
+    }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .interview-card {
+        animation: none;
+    }
+
+    .progress-bar,
+    .mic,
+    #speak-btn,
+    #next-btn,
+    .chips button,
+    .chips .chip {
+        transition: none;
+    }
+
+}
+
+</style>
+{% endblock %}
+
+
 {% block extra_js %}
 <script type="module" src="{{ url_for('static', filename='js/interview.js') }}"></script>
 {% endblock %}
+
+
 {% block content %}
+
 <div class="patient-shell">
-  <article class="card interview-card" id="interview-root" data-session-id="{{ session.id }}" data-lang="{{ locale }}">
+
+  <article
+    class="card interview-card"
+    id="interview-root"
+    data-session-id="{{ session.id }}"
+    data-lang="{{ locale }}">
+
     <h1>{{ _('app_name') }}</h1>
+
     <p id="q-section"></p>
-    <div class="progress-wrap"><div id="q-progress" class="progress-bar" style="width:0"></div></div>
-    <h2 id="q-prompt"></h2>
-    <div class="voice-row">
-      <button class="mic" id="mic-btn" type="button" aria-label="{{ _('speak') }}">🎤</button>
-      <button class="btn btn-ghost" id="speak-btn" type="button" aria-label="Read question">Listen</button>
+
+    <div class="progress-wrap">
+      <div
+        id="q-progress"
+        class="progress-bar"
+        style="width:0">
+      </div>
     </div>
-    <p id="voice-hint" hidden>{{ _('voice_unavailable') }}</p>
-    <label class="sr-only" for="q-input">{{ _('type_answer') }}</label>
-    <textarea id="q-input" rows="3" placeholder="{{ _('type_answer') }}"></textarea>
+
+    <h2 id="q-prompt"></h2>
+
+    <div class="voice-row">
+
+      <button
+        class="mic"
+        id="mic-btn"
+        type="button"
+        aria-label="{{ _('speak') }}">
+        🎤
+      </button>
+
+      <button
+        class="btn btn-ghost"
+        id="speak-btn"
+        type="button"
+        aria-label="Read question">
+        Listen
+      </button>
+
+    </div>
+
+    <p id="voice-hint" hidden>
+      {{ _('voice_unavailable') }}
+    </p>
+
+    <label
+      class="sr-only"
+      for="q-input">
+      {{ _('type_answer') }}
+    </label>
+
+    <textarea
+      id="q-input"
+      rows="3"
+      placeholder="{{ _('type_answer') }}"></textarea>
+
     <p>{{ _('or') }}</p>
+
     <div id="q-chips" class="chips"></div>
+
     <p id="q-counter"></p>
-    <div id="emergency-banner" class="flash flash-danger" hidden data-default="{{ _('emergency_notice') }}"></div>
-    <button class="btn btn-primary btn-lg" id="next-btn" type="button">Continue</button>
+
+    <div
+      id="emergency-banner"
+      class="flash flash-danger"
+      hidden
+      data-default="{{ _('emergency_notice') }}">
+    </div>
+
+    <button
+      class="btn btn-primary btn-lg"
+      id="next-btn"
+      type="button">
+      Continue
+    </button>
+
   </article>
+
 </div>
+
 {% include "components/patient_bottom_nav.html" %}
+
 {% endblock %}

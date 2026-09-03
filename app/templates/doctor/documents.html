@@ -1,13 +1,208 @@
 {% extends "doctor/_shell.html" %}
+
 {% block staff %}
-<h1>Documents</h1>
-{% for d in documents %}
-  <article class="card">
-    <h3>{{ d.filename }}</h3>
-    <p>{{ d.category }} · {{ d.status }} · Patient {{ d.patient.full_name if d.patient else d.patient_id }}</p>
-    <a href="{{ url_for('doctor.documents', patient_id=d.patient_id) }}">Open patient documents</a>
-  </article>
-{% else %}
-  <p class="empty">No documents processed yet.</p>
-{% endfor %}
+
+<style>
+  .documents-page {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 28px;
+  }
+
+  .documents-header {
+    margin-bottom: 24px;
+  }
+
+  .documents-header h1 {
+    margin: 0;
+
+    color: #1f2937;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .documents-header p {
+    margin: 7px 0 0;
+
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .documents-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .document-card {
+    position: relative;
+
+    padding: 22px;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 13px;
+
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+
+    overflow: hidden;
+  }
+
+  .document-card::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 4px;
+
+    background: #2563eb;
+  }
+
+  .document-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #cbd5e1;
+
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+  }
+
+  .document-card h3 {
+    margin: 0 0 10px;
+
+    color: #111827;
+    font-size: 17px;
+    font-weight: 650;
+
+    word-break: break-word;
+  }
+
+  .document-card p {
+    margin: 0 0 17px;
+
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .document-card a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 14px;
+
+    background: #ffffff;
+    border: 1px solid #2563eb;
+    border-radius: 8px;
+
+    color: #2563eb;
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 650;
+
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .document-card a:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+  }
+
+  .document-card a:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.15);
+    outline-offset: 2px;
+  }
+
+  .documents-empty {
+    padding: 45px 20px;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 13px;
+
+    color: #6b7280;
+    text-align: center;
+    font-size: 14px;
+
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+  }
+
+  @media (max-width: 850px) {
+    .documents-page {
+      padding: 20px;
+    }
+
+    .documents-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .documents-page {
+      padding: 16px;
+    }
+
+    .documents-header h1 {
+      font-size: 25px;
+    }
+
+    .document-card {
+      padding: 19px;
+    }
+  }
+</style>
+
+<div class="documents-page">
+
+  <div class="documents-header">
+    <h1>Documents</h1>
+    <p>Review processed patient documents and records</p>
+  </div>
+
+  <div class="documents-list">
+
+    {% for d in documents %}
+
+      <article class="card document-card">
+
+        <h3>{{ d.filename }}</h3>
+
+        <p>
+          {{ d.category }}
+          · {{ d.status }}
+          · Patient {{ d.patient.full_name if d.patient else d.patient_id }}
+        </p>
+
+        <a href="{{ url_for('doctor.documents', patient_id=d.patient_id) }}">
+          Open patient documents
+        </a>
+
+      </article>
+
+    {% else %}
+
+      <p class="empty documents-empty">
+        No documents processed yet.
+      </p>
+
+    {% endfor %}
+
+  </div>
+
+</div>
+
 {% endblock %}

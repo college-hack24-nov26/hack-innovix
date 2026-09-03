@@ -1,108 +1,945 @@
 {% extends "doctor/_shell.html" %}
-{% block staff %}
-<header class="patient-header card">
-  <div>
-    <h1>{{ patient.full_name }}</h1>
-    <p>Age {{ patient.age or "Not reported" }} · {{ patient.gender or "Not reported" }} · Patient ID {{ patient.id }}</p>
-    <p>ABHA {{ patient.abha_id or "Not available" }} · Dept {{ patient.department }} · Language {{ patient.language }}</p>
-  </div>
-  <div>
-    <button class="btn btn-ghost" data-fhir="{{ patient.id }}" type="button">FHIR export</button>
-  </div>
-</header>
-<nav class="tabs">
-  <a class="{% if tab=='overview' %}active{% endif %}" href="{{ url_for('doctor.patient_view', patient_id=patient.id) }}">Overview</a>
-  <a class="{% if tab=='history' %}active{% endif %}" href="{{ url_for('doctor.history', patient_id=patient.id) }}">History</a>
-  <a class="{% if tab=='documents' %}active{% endif %}" href="{{ url_for('doctor.documents', patient_id=patient.id) }}">Documents</a>
-  <a class="{% if tab=='timeline' %}active{% endif %}" href="{{ url_for('doctor.timeline', patient_id=patient.id) }}">Timeline</a>
-  <a class="{% if tab=='review' %}active{% endif %}" href="{{ url_for('doctor.review', patient_id=patient.id) }}">AI Summary</a>
-  <a class="{% if tab=='notes' %}active{% endif %}" href="{{ url_for('doctor.notes', patient_id=patient.id) }}">{{ _('nav_notes') }}</a>
-  <a class="{% if tab=='audit' %}active{% endif %}" href="{{ url_for('doctor.patient_audit', patient_id=patient.id) }}">{{ _('nav_audit') }}</a>
-</nav>
 
-{% if tab == 'overview' %}
-  <div class="grid grid-3">
-    <div class="card">Open alerts: {{ alerts|length if alerts is defined else 0 }}</div>
-    <div class="card">Documents: {{ documents|length }}</div>
-    <div class="card">AYUSH mode: {{ "Yes" if patient.ayush_mode else "No" }}</div>
-  </div>
-{% elif tab == 'history' %}
-  <div class="card">
-    {% if session %}
-      {% for a in session.answers %}
-        <p><strong>{{ a.section }} / {{ a.question_key }}:</strong> {{ a.value or "Not reported" }}</p>
-      {% endfor %}
-    {% else %}Not available{% endif %}
-  </div>
-{% elif tab == 'documents' %}
-  {% for d in documents %}
-    <article class="card">
-      <h3>{{ d.filename }}</h3>
-      <p>{{ d.category }}</p>
-      {% for e in d.extractions %}
-        <p>{{ e.field_name }}: {{ e.field_value }}
-          {% if d.id %}<a href="{{ url_for('documents.uploaded_file', filename=d.stored_path.split('\\')[-1].split('/')[-1]) }}">Source document</a>{% endif %}
-        </p>
-      {% endfor %}
-    </article>
-  {% else %}<p class="empty">No documents</p>{% endfor %}
-{% elif tab == 'timeline' %}
-  <div class="timeline">
-    {% for item in items %}
-      <div class="timeline-item">
-        <strong>{{ item.date }}</strong> {{ item.title }}
-        <div>{{ item.details }}</div>
-        <small>Source: {{ item.source }}</small>
-      </div>
-    {% endfor %}
-  </div>
-  {% for lab in patient.lab_results %}
-    <div class="lab card">
-      <div>
-        <strong>{{ lab.test_name }}</strong>
-        <div>{{ lab.result_value }} {{ lab.unit }}</div>
-        <div>Reference: {{ lab.reference_range or "Reference range unavailable." }}</div>
-      </div>
-      <div>{{ lab.status_label }}</div>
+{% block staff %}
+
+<style>
+  /* ================================
+     Patient View
+     ================================ */
+
+  .patient-view {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 28px;
+  }
+
+  /* ================================
+     Patient Header
+     ================================ */
+
+  .patient-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    padding: 24px 26px;
+    margin-bottom: 18px;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+  }
+
+  .patient-header h1 {
+    margin: 0 0 10px;
+
+    color: #111827;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+  }
+
+  .patient-header p {
+    margin: 5px 0;
+
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .patient-header p:last-child {
+    color: #4b5563;
+    font-weight: 500;
+  }
+
+  /* ================================
+     Buttons
+     ================================ */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+    padding: 9px 16px;
+
+    border-radius: 8px;
+    border: 1px solid transparent;
+
+    font-size: 13px;
+    font-weight: 650;
+
+    cursor: pointer;
+    text-decoration: none;
+
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-primary {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+  }
+
+  .btn-ghost {
+    background: #ffffff;
+    border-color: #d1d5db;
+    color: #374151;
+  }
+
+  .btn-ghost:hover {
+    background: #f8fafc;
+    border-color: #9ca3af;
+  }
+
+  .btn-danger {
+    background: #ffffff;
+    border-color: #dc2626;
+    color: #dc2626;
+  }
+
+  .btn-danger:hover {
+    background: #fef2f2;
+  }
+
+  /* ================================
+     Tabs
+     ================================ */
+
+  .tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    margin-bottom: 20px;
+    padding: 5px;
+
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .tabs a {
+    flex: 0 0 auto;
+
+    padding: 10px 15px;
+
+    border-radius: 7px;
+
+    color: #6b7280;
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .tabs a:hover {
+    background: #ffffff;
+    color: #374151;
+  }
+
+  .tabs a.active {
+    background: #2563eb;
+    color: #ffffff;
+  }
+
+  /* ================================
+     Cards
+     ================================ */
+
+  .card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+  }
+
+  /* ================================
+     Overview
+     ================================ */
+
+  .grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid-3 .card {
+    padding: 22px;
+
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* ================================
+     History
+     ================================ */
+
+  .patient-view > .card {
+    padding: 22px;
+  }
+
+  .patient-view > .card p {
+    margin: 0;
+    padding: 13px 0;
+
+    color: #4b5563;
+    font-size: 14px;
+
+    border-bottom: 1px solid #f1f5f9;
+    line-height: 1.6;
+  }
+
+  .patient-view > .card p:last-child {
+    border-bottom: none;
+  }
+
+  .patient-view > .card p strong {
+    color: #1f2937;
+  }
+
+  /* ================================
+     Documents
+     ================================ */
+
+  .document-card {
+    padding: 20px;
+    margin-bottom: 14px;
+  }
+
+  .document-card h3 {
+    margin: 0 0 7px;
+
+    color: #1f2937;
+    font-size: 16px;
+    font-weight: 650;
+  }
+
+  .document-card p {
+    margin: 7px 0;
+
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .document-card a {
+    display: inline-block;
+    margin-left: 8px;
+
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .document-card a:hover {
+    text-decoration: underline;
+  }
+
+  /* ================================
+     Timeline
+     ================================ */
+
+  .timeline {
+    position: relative;
+
+    margin: 5px 0 24px;
+    padding-left: 28px;
+  }
+
+  .timeline::before {
+    content: "";
+
+    position: absolute;
+    left: 7px;
+    top: 5px;
+    bottom: 5px;
+
+    width: 2px;
+
+    background: #dbeafe;
+  }
+
+  .timeline-item {
+    position: relative;
+
+    padding: 16px 18px;
+    margin-bottom: 14px;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+  }
+
+  .timeline-item::before {
+    content: "";
+
+    position: absolute;
+    left: -27px;
+    top: 20px;
+
+    width: 10px;
+    height: 10px;
+
+    background: #2563eb;
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+
+    box-shadow: 0 0 0 1px #bfdbfe;
+  }
+
+  .timeline-item strong {
+    color: #1f2937;
+    font-size: 14px;
+  }
+
+  .timeline-item div {
+    margin-top: 7px;
+
+    color: #4b5563;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .timeline-item small {
+    display: block;
+    margin-top: 8px;
+
+    color: #9ca3af;
+    font-size: 12px;
+  }
+
+  /* ================================
+     Lab Results
+     ================================ */
+
+  .lab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+
+  .lab strong {
+    color: #1f2937;
+    font-size: 14px;
+  }
+
+  .lab div div {
+    margin-top: 5px;
+
+    color: #4b5563;
+    font-size: 13px;
+  }
+
+  .lab > div:last-child {
+    color: #374151;
+    font-size: 13px;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  /* ================================
+     AI Review
+     ================================ */
+
+  .disclaimer {
+    margin: 0 0 16px;
+    padding: 12px 15px;
+
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+
+    color: #4b5563;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .patient-view form {
+    background: #ffffff;
+  }
+
+  .patient-view form label {
+    display: block;
+
+    margin-bottom: 16px;
+
+    color: #374151;
+    font-size: 13px;
+    font-weight: 650;
+  }
+
+  .patient-view textarea {
+    display: block;
+
+    width: 100%;
+    margin-top: 7px;
+    padding: 11px 13px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+
+    color: #1f2937;
+
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+
+    resize: vertical;
+    outline: none;
+
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .patient-view textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+
+  .patient-view form .btn {
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* ================================
+     Notes
+     ================================ */
+
+  .patient-view form.form {
+    padding: 22px;
+    margin-bottom: 18px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+  }
+
+  .patient-view article.card {
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+
+  .patient-view article.card p {
+    margin: 0 0 9px;
+
+    color: #374151;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .patient-view article.card small {
+    color: #9ca3af;
+    font-size: 12px;
+  }
+
+  /* ================================
+     Audit Table
+     ================================ */
+
+  .patient-view table.dense {
+    width: 100%;
+    border-collapse: collapse;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    overflow: hidden;
+  }
+
+  .patient-view table.dense thead {
+    background: #f8fafc;
+  }
+
+  .patient-view table.dense th {
+    padding: 14px 16px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    color: #4b5563;
+
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .patient-view table.dense td {
+    padding: 15px 16px;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    color: #4b5563;
+    font-size: 13px;
+  }
+
+  .patient-view table.dense tbody tr:hover {
+    background: #f8fafc;
+  }
+
+  .patient-view table.dense tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ================================
+     Empty State
+     ================================ */
+
+  .empty {
+    padding: 28px !important;
+
+    color: #9ca3af !important;
+
+    text-align: center;
+    font-size: 14px;
+  }
+
+  /* ================================
+     Responsive
+     ================================ */
+
+  @media (max-width: 900px) {
+    .patient-view {
+      padding: 20px;
+    }
+
+    .grid-3 {
+      grid-template-columns: 1fr;
+    }
+
+    .patient-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .patient-view {
+      padding: 16px;
+    }
+
+    .patient-header {
+      padding: 20px;
+    }
+
+    .patient-header h1 {
+      font-size: 24px;
+    }
+
+    .tabs {
+      margin-bottom: 16px;
+    }
+
+    .tabs a {
+      padding: 9px 12px;
+      font-size: 12px;
+    }
+
+    .lab {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .patient-view table.dense {
+      min-width: 600px;
+    }
+
+    .patient-view > .card {
+      padding: 17px;
+    }
+  }
+</style>
+
+<div class="patient-view">
+
+  <header class="patient-header card">
+    <div>
+      <h1>{{ patient.full_name }}</h1>
+
+      <p>
+        Age {{ patient.age or "Not reported" }}
+        · {{ patient.gender or "Not reported" }}
+        · Patient ID {{ patient.id }}
+      </p>
+
+      <p>
+        ABHA {{ patient.abha_id or "Not available" }}
+        · Dept {{ patient.department }}
+        · Language {{ patient.language }}
+      </p>
     </div>
-  {% endfor %}
-{% elif tab == 'review' %}
-  <p class="disclaimer">{{ _('ai_draft') }}</p>
-  <form method="post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    {% if summary %}
-      {% for k, v in summary.content_json.items() %}
-        <label>{{ k }}<textarea name="{{ k }}" rows="2">{{ v }}</textarea></label>
-      {% endfor %}
-      <label>Doctor notes <textarea name="notes"></textarea></label>
-      <button class="btn btn-ghost" name="action" value="save">Save Draft</button>
-      <button class="btn btn-primary" name="action" value="confirm">Confirm</button>
-      <button class="btn btn-danger" name="action" value="reject">Reject</button>
-    {% else %}
-      <button class="btn btn-primary" name="action" value="generate">Generate draft summary</button>
-    {% endif %}
-  </form>
-{% elif tab == 'notes' %}
-  <form method="post" class="form">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <label>Clinical notes<textarea name="notes" rows="4"></textarea></label>
-    <button class="btn btn-primary" type="submit">Save note</button>
-  </form>
-  {% for r in reviews or [] %}
-    <article class="card"><p>{{ r.notes }}</p><small>{{ r.created_at }} · {{ r.decision }}</small></article>
-  {% else %}
-    <p class="empty">No notes yet.</p>
-  {% endfor %}
-{% elif tab == 'audit' %}
-  <table class="dense">
-    <thead><tr><th>Time</th><th>Action</th><th>Resource</th></tr></thead>
-    <tbody>
-      {% for log in logs or [] %}
-        <tr><td>{{ log.created_at }}</td><td>{{ log.action }}</td><td>{{ log.resource_type }}</td></tr>
+
+    <div>
+      <button class="btn btn-ghost" data-fhir="{{ patient.id }}" type="button">
+        FHIR export
+      </button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+
+    <a class="{% if tab=='overview' %}active{% endif %}"
+       href="{{ url_for('doctor.patient_view', patient_id=patient.id) }}">
+      Overview
+    </a>
+
+    <a class="{% if tab=='history' %}active{% endif %}"
+       href="{{ url_for('doctor.history', patient_id=patient.id) }}">
+      History
+    </a>
+
+    <a class="{% if tab=='documents' %}active{% endif %}"
+       href="{{ url_for('doctor.documents', patient_id=patient.id) }}">
+      Documents
+    </a>
+
+    <a class="{% if tab=='timeline' %}active{% endif %}"
+       href="{{ url_for('doctor.timeline', patient_id=patient.id) }}">
+      Timeline
+    </a>
+
+    <a class="{% if tab=='review' %}active{% endif %}"
+       href="{{ url_for('doctor.review', patient_id=patient.id) }}">
+      AI Summary
+    </a>
+
+    <a class="{% if tab=='notes' %}active{% endif %}"
+       href="{{ url_for('doctor.notes', patient_id=patient.id) }}">
+      {{ _('nav_notes') }}
+    </a>
+
+    <a class="{% if tab=='audit' %}active{% endif %}"
+       href="{{ url_for('doctor.patient_audit', patient_id=patient.id) }}">
+      {{ _('nav_audit') }}
+    </a>
+
+  </nav>
+
+
+  {% if tab == 'overview' %}
+
+    <div class="grid grid-3">
+
+      <div class="card">
+        Open alerts: {{ alerts|length if alerts is defined else 0 }}
+      </div>
+
+      <div class="card">
+        Documents: {{ documents|length }}
+      </div>
+
+      <div class="card">
+        AYUSH mode: {{ "Yes" if patient.ayush_mode else "No" }}
+      </div>
+
+    </div>
+
+
+  {% elif tab == 'history' %}
+
+    <div class="card">
+
+      {% if session %}
+
+        {% for a in session.answers %}
+
+          <p>
+            <strong>
+              {{ a.section }} / {{ a.question_key }}:
+            </strong>
+
+            {{ a.value or "Not reported" }}
+          </p>
+
+        {% endfor %}
+
       {% else %}
-        <tr><td colspan="3" class="empty">No audit entries for this patient.</td></tr>
+
+        Not available
+
+      {% endif %}
+
+    </div>
+
+
+  {% elif tab == 'documents' %}
+
+    {% for d in documents %}
+
+      <article class="card document-card">
+
+        <h3>{{ d.filename }}</h3>
+
+        <p>{{ d.category }}</p>
+
+        {% for e in d.extractions %}
+
+          <p>
+            {{ e.field_name }}: {{ e.field_value }}
+
+            {% if d.id %}
+              <a href="{{ url_for('documents.uploaded_file', filename=d.stored_path.split('\\')[-1].split('/')[-1]) }}">
+                Source document
+              </a>
+            {% endif %}
+          </p>
+
+        {% endfor %}
+
+      </article>
+
+    {% else %}
+
+      <p class="empty">
+        No documents
+      </p>
+
+    {% endfor %}
+
+
+  {% elif tab == 'timeline' %}
+
+    <div class="timeline">
+
+      {% for item in items %}
+
+        <div class="timeline-item">
+
+          <strong>{{ item.date }}</strong>
+          {{ item.title }}
+
+          <div>
+            {{ item.details }}
+          </div>
+
+          <small>
+            Source: {{ item.source }}
+          </small>
+
+        </div>
+
       {% endfor %}
-    </tbody>
-  </table>
-{% endif %}
+
+    </div>
+
+
+    {% for lab in patient.lab_results %}
+
+      <div class="lab card">
+
+        <div>
+
+          <strong>
+            {{ lab.test_name }}
+          </strong>
+
+          <div>
+            {{ lab.result_value }} {{ lab.unit }}
+          </div>
+
+          <div>
+            Reference:
+            {{ lab.reference_range or "Reference range unavailable." }}
+          </div>
+
+        </div>
+
+        <div>
+          {{ lab.status_label }}
+        </div>
+
+      </div>
+
+    {% endfor %}
+
+
+  {% elif tab == 'review' %}
+
+    <p class="disclaimer">
+      {{ _('ai_draft') }}
+    </p>
+
+    <form method="post">
+
+      <input type="hidden"
+             name="csrf_token"
+             value="{{ csrf_token() }}">
+
+      {% if summary %}
+
+        {% for k, v in summary.content_json.items() %}
+
+          <label>
+            {{ k }}
+
+            <textarea name="{{ k }}" rows="2">{{ v }}</textarea>
+          </label>
+
+        {% endfor %}
+
+        <label>
+          Doctor notes
+
+          <textarea name="notes"></textarea>
+        </label>
+
+        <button class="btn btn-ghost"
+                name="action"
+                value="save">
+          Save Draft
+        </button>
+
+        <button class="btn btn-primary"
+                name="action"
+                value="confirm">
+          Confirm
+        </button>
+
+        <button class="btn btn-danger"
+                name="action"
+                value="reject">
+          Reject
+        </button>
+
+      {% else %}
+
+        <button class="btn btn-primary"
+                name="action"
+                value="generate">
+          Generate draft summary
+        </button>
+
+      {% endif %}
+
+    </form>
+
+
+  {% elif tab == 'notes' %}
+
+    <form method="post" class="form">
+
+      <input type="hidden"
+             name="csrf_token"
+             value="{{ csrf_token() }}">
+
+      <label>
+        Clinical notes
+
+        <textarea name="notes" rows="4"></textarea>
+      </label>
+
+      <button class="btn btn-primary" type="submit">
+        Save note
+      </button>
+
+    </form>
+
+
+    {% for r in reviews or [] %}
+
+      <article class="card">
+
+        <p>
+          {{ r.notes }}
+        </p>
+
+        <small>
+          {{ r.created_at }} · {{ r.decision }}
+        </small>
+
+      </article>
+
+    {% else %}
+
+      <p class="empty">
+        No notes yet.
+      </p>
+
+    {% endfor %}
+
+
+  {% elif tab == 'audit' %}
+
+    <table class="dense">
+
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Action</th>
+          <th>Resource</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {% for log in logs or [] %}
+
+          <tr>
+            <td>{{ log.created_at }}</td>
+            <td>{{ log.action }}</td>
+            <td>{{ log.resource_type }}</td>
+          </tr>
+
+        {% else %}
+
+          <tr>
+            <td colspan="3" class="empty">
+              No audit entries for this patient.
+            </td>
+          </tr>
+
+        {% endfor %}
+
+      </tbody>
+
+    </table>
+
+  {% endif %}
+
+</div>
+
 {% endblock %}

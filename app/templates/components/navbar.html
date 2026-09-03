@@ -1,30 +1,471 @@
 <header class="navbar" role="banner">
+
   <div class="navbar-inner">
+
+    <!-- BRAND -->
     <a class="brand" href="{{ url_for('main.index') }}">
       <span class="brand-mark" aria-hidden="true">+</span>
       {{ _('app_name') }}
     </a>
-    <button class="btn btn-ghost nav-toggle" data-menu type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">Menu</button>
+
+    <!--
+    <button
+      class="btn btn-ghost nav-toggle"
+      data-menu
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      aria-label="Menu">
+      Menu
+    </button>
+    -->
+
+    <!-- NAVIGATION -->
     <nav class="nav-links" id="site-nav" aria-label="{{ _('nav_main') }}">
-      <a class="nav-home{% if request.endpoint == 'main.index' %} is-active{% endif %}" href="{{ url_for('main.index') }}">{{ _('nav_home') }}</a>
+
+      <!-- HOME -->
+      <a
+        class="nav-home{% if request.endpoint == 'main.index' %} is-active{% endif %}"
+        href="{{ url_for('main.index') }}">
+        {{ _('nav_home') }}
+      </a>
+
+      <!-- DASHBOARD -->
       {% if current_user.is_authenticated %}
-        <a class="{% if request.endpoint and request.endpoint.endswith('.dashboard') %}is-active{% endif %}" href="{{ dashboard_url }}">{{ _('nav_dashboard') }}</a>
+        <a
+          class="{% if request.endpoint and request.endpoint.endswith('.dashboard') %}is-active{% endif %}"
+          href="{{ dashboard_url }}">
+          {{ _('nav_dashboard') }}
+        </a>
       {% endif %}
-      <a class="{% if request.endpoint == 'main.about' %}is-active{% endif %}" href="{{ url_for('main.about') }}">{{ _('about') }}</a>
-      <a class="{% if request.endpoint == 'main.help_page' %}is-active{% endif %}" href="{{ url_for('main.help_page') }}">{{ _('help') }}</a>
-      <a class="{% if request.endpoint and request.endpoint.startswith('kiosk.') %}is-active{% endif %}" href="{{ url_for('kiosk.kiosk') }}">{{ _('nav_kiosk') }}</a>
+
+      <!-- ABOUT -->
+      <a
+        class="{% if request.endpoint == 'main.about' %}is-active{% endif %}"
+        href="{{ url_for('main.about') }}">
+        {{ _('about') }}
+      </a>
+
+      <!-- HELP -->
+      <a
+        class="{% if request.endpoint == 'main.help_page' %}is-active{% endif %}"
+        href="{{ url_for('main.help_page') }}">
+        {{ _('help') }}
+      </a>
+
+      <!-- KIOSK -->
+      <a
+        class="{% if request.endpoint and request.endpoint.startswith('kiosk.') %}is-active{% endif %}"
+        href="{{ url_for('kiosk.kiosk') }}">
+        {{ _('nav_kiosk') }}
+      </a>
+
+
+      <!-- =========================================
+           LANGUAGE DROPDOWN
+      ========================================== -->
+
       <div class="lang-switch" aria-label="{{ _('select_language') }}">
-        <a href="{{ url_for('auth.set_language', code='en') }}" {% if locale == 'en' %}aria-current="true"{% endif %}>EN</a>
-        <a href="{{ url_for('auth.set_language', code='hi') }}" {% if locale == 'hi' %}aria-current="true"{% endif %}>HI</a>
-        <a href="{{ url_for('auth.set_language', code='mr') }}" {% if locale == 'mr' %}aria-current="true"{% endif %}>MR</a>
+
+        <button
+          type="button"
+          class="lang-button"
+          onclick="toggleLanguageMenu()"
+          aria-haspopup="true"
+          aria-expanded="false">
+
+          🌐 {{ _('select_language') }}
+
+        </button>
+
+        <div class="lang-menu" id="language-menu">
+
+          <a
+            href="{{ url_for('auth.set_language', code='en') }}"
+            {% if locale == 'en' %}aria-current="true"{% endif %}>
+            English
+          </a>
+
+          <a
+            href="{{ url_for('auth.set_language', code='hi') }}"
+            {% if locale == 'hi' %}aria-current="true"{% endif %}>
+            हिंदी
+          </a>
+
+          <a
+            href="{{ url_for('auth.set_language', code='mr') }}"
+            {% if locale == 'mr' %}aria-current="true"{% endif %}>
+            मराठी
+          </a>
+
+        </div>
+
       </div>
+
+      <!-- END LANGUAGE DROPDOWN -->
+
+
+      <!-- =========================================
+           AUTHENTICATED USER
+      ========================================== -->
+
       {% if current_user.is_authenticated %}
-        <span class="nav-user">{{ current_user.full_name }}</span>
-        <a href="{{ url_for('auth.logout') }}">{{ _('logout') }}</a>
+
+        <span class="nav-user">
+          {{ current_user.full_name }}
+        </span>
+
+        <a href="{{ url_for('auth.logout') }}">
+          {{ _('logout') }}
+        </a>
+
       {% else %}
-        <a class="{% if request.endpoint == 'auth.login' %}is-active{% endif %}" href="{{ url_for('auth.login') }}">{{ _('login') }}</a>
-        <a class="btn btn-primary nav-cta" href="{{ url_for('auth.register') }}">{{ _('register') }}</a>
+
+        <!-- LOGIN -->
+        <a
+          class="{% if request.endpoint == 'auth.login' %}is-active{% endif %}"
+          href="{{ url_for('auth.login') }}">
+          {{ _('login') }}
+        </a>
+
+        <!-- REGISTER BUTTON -->
+        <a
+          class="btn btn-primary nav-cta"
+          href="{{ url_for('auth.register') }}">
+          ✨ {{ _('register') }}
+        </a>
+
       {% endif %}
+
     </nav>
+
   </div>
+
 </header>
+
+
+<!-- =========================================
+     LANGUAGE DROPDOWN CSS
+========================================= -->
+
+<style>
+
+/* -----------------------------------------
+   LANGUAGE SWITCH
+----------------------------------------- */
+
+.lang-switch {
+  position: relative;
+}
+
+.lang-button {
+  cursor: pointer;
+
+  background: none;
+  border: none;
+
+  font: inherit;
+  color: inherit;
+
+  padding: 8px 10px;
+
+  border-radius: 8px;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.lang-button:hover {
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+}
+
+
+/* -----------------------------------------
+   LANGUAGE MENU
+----------------------------------------- */
+
+.lang-menu {
+  display: none;
+
+  position: absolute;
+
+  right: 0;
+  top: calc(100% + 10px);
+
+  z-index: 1000;
+
+  min-width: 150px;
+
+  background: rgba(255, 255, 255, 0.98);
+
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 12px 30px rgba(15, 23, 42, 0.15);
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  animation: languageMenu 0.2s ease;
+}
+
+.lang-menu.show {
+  display: block;
+}
+
+.lang-menu a {
+  display: block;
+
+  padding: 11px 15px;
+
+  text-decoration: none;
+
+  color: #333;
+
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    padding-left 0.2s ease;
+}
+
+.lang-menu a:hover {
+  background: #eff6ff;
+  color: #2563eb;
+
+  padding-left: 20px;
+}
+
+.lang-menu a[aria-current="true"] {
+  font-weight: 700;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+}
+
+
+/* -----------------------------------------
+   REGISTER BUTTON
+----------------------------------------- */
+
+.nav-cta {
+
+  /* Layout */
+  display: inline-flex !important;
+
+  align-items: center;
+  justify-content: center;
+
+  white-space: nowrap;
+
+  min-height: 42px;
+
+  padding: 10px 21px !important;
+
+
+  /* Shape */
+  border-radius: 12px !important;
+
+  border: none !important;
+
+
+  /* Gradient */
+  background: linear-gradient(
+    135deg,
+    #2563eb 0%,
+    #0f766e 100%
+  ) !important;
+
+
+  /* Text */
+  color: #ffffff !important;
+
+  text-decoration: none !important;
+
+  font-size: 0.94rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.2px;
+
+
+  /* Shadow */
+  box-shadow:
+    0 6px 18px rgba(37, 99, 235, 0.25);
+
+
+  /* Animation */
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+
+/* -----------------------------------------
+   REGISTER HOVER
+----------------------------------------- */
+
+.nav-cta:hover {
+
+  transform: translateY(-2px);
+
+  background: linear-gradient(
+    135deg,
+    #1d4ed8 0%,
+    #047857 100%
+  ) !important;
+
+  color: #ffffff !important;
+
+  box-shadow:
+    0 10px 25px rgba(37, 99, 235, 0.35);
+}
+
+
+/* -----------------------------------------
+   REGISTER ACTIVE / CLICK
+----------------------------------------- */
+
+.nav-cta:active {
+
+  transform: translateY(0);
+
+  box-shadow:
+    0 4px 12px rgba(37, 99, 235, 0.20);
+}
+
+
+/* -----------------------------------------
+   REGISTER FOCUS
+----------------------------------------- */
+
+.nav-cta:focus-visible {
+
+  outline: 3px solid rgba(37, 99, 235, 0.30);
+
+  outline-offset: 3px;
+}
+
+
+/* -----------------------------------------
+   MENU ANIMATION
+----------------------------------------- */
+
+@keyframes languageMenu {
+
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* -----------------------------------------
+   MOBILE
+----------------------------------------- */
+
+@media (max-width: 768px) {
+
+  .nav-cta {
+
+    min-height: 40px;
+
+    padding: 9px 16px !important;
+
+    border-radius: 10px !important;
+
+    font-size: 0.88rem;
+
+  }
+
+  .lang-menu {
+
+    right: 0;
+
+    min-width: 140px;
+
+  }
+
+}
+
+
+/* -----------------------------------------
+   SMALL MOBILE
+----------------------------------------- */
+
+@media (max-width: 480px) {
+
+  .nav-cta {
+
+    padding: 8px 13px !important;
+
+    font-size: 0.85rem;
+
+  }
+
+  .lang-button {
+
+    padding: 7px 8px;
+
+    font-size: 0.88rem;
+
+  }
+
+}
+
+</style>
+
+
+<!-- =========================================
+     LANGUAGE DROPDOWN JAVASCRIPT
+========================================= -->
+
+<script>
+
+function toggleLanguageMenu() {
+
+  const menu = document.getElementById("language-menu");
+
+  const button = document.querySelector(".lang-button");
+
+  const isOpen = menu.classList.toggle("show");
+
+  button.setAttribute("aria-expanded", isOpen);
+
+}
+
+
+// Close dropdown when clicking outside
+
+document.addEventListener("click", function(event) {
+
+  const langSwitch = document.querySelector(".lang-switch");
+
+  const menu = document.getElementById("language-menu");
+
+  const button = document.querySelector(".lang-button");
+
+  if (!langSwitch.contains(event.target)) {
+
+    menu.classList.remove("show");
+
+    button.setAttribute("aria-expanded", "false");
+
+  }
+
+});
+
+</script>

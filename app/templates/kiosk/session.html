@@ -1,8 +1,243 @@
 {% extends "base.html" %}
+
 {% block body_class %}kiosk-body{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ================================
+   KIOSK SESSION PAGE
+   Style only — functionality unchanged
+================================ */
+
+.kiosk-body {
+    min-height: 100vh;
+    margin: 0;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.12), transparent 30%),
+        radial-gradient(circle at 85% 80%, rgba(16, 185, 129, 0.12), transparent 30%),
+        linear-gradient(135deg, #f8fbff 0%, #eef6ff 50%, #f0fdf8 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+/* Main card */
+.kiosk-wrap {
+    width: min(900px, 92%);
+    padding: 55px 50px;
+    text-align: center;
+
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+
+    box-shadow:
+        0 25px 70px rgba(15, 23, 42, 0.12),
+        0 8px 25px rgba(37, 99, 235, 0.06);
+
+    animation: kioskFade 0.6s ease;
+}
+
+/* Heading */
+.kiosk-wrap h1 {
+    margin: 0 0 12px;
+
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+
+    background: linear-gradient(135deg, #2563eb, #0f766e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Action buttons container */
+.kiosk-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+
+    margin: 35px auto 28px;
+    max-width: 700px;
+}
+
+/* Buttons */
+.kiosk-wrap .btn {
+    min-height: 65px;
+    padding: 16px 25px;
+
+    border-radius: 16px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-decoration: none;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+/* Primary buttons */
+.kiosk-wrap .btn-primary {
+    color: #fff;
+
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+
+    border: none;
+
+    box-shadow:
+        0 10px 25px rgba(37, 99, 235, 0.22);
+}
+
+.kiosk-wrap .btn-primary:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 16px 32px rgba(37, 99, 235, 0.30);
+}
+
+.kiosk-wrap .btn-primary:active {
+    transform: translateY(-1px);
+}
+
+/* Ghost button */
+.kiosk-wrap .btn-ghost {
+    color: #1e40af;
+
+    background: rgba(255, 255, 255, 0.75);
+
+    border: 2px solid #dbeafe;
+
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+}
+
+.kiosk-wrap .btn-ghost:hover {
+    color: #fff;
+
+    background: linear-gradient(135deg, #2563eb, #0f766e);
+
+    border-color: transparent;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 25px rgba(37, 99, 235, 0.20);
+}
+
+/* New patient button */
+.kiosk-wrap > p {
+    margin: 12px 0 0;
+}
+
+.kiosk-wrap > p .btn {
+    width: min(100%, 420px);
+}
+
+/* Large buttons */
+.kiosk-wrap .btn-lg {
+    font-size: 1.05rem;
+}
+
+/* Focus accessibility */
+.kiosk-wrap .btn:focus-visible {
+    outline: 4px solid rgba(37, 99, 235, 0.22);
+    outline-offset: 3px;
+}
+
+/* Animation */
+@keyframes kioskFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ================================
+   TABLET
+================================ */
+
+@media (max-width: 700px) {
+
+    .kiosk-wrap {
+        padding: 42px 28px;
+        border-radius: 24px;
+    }
+
+    .kiosk-actions {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .kiosk-wrap .btn {
+        min-height: 60px;
+    }
+}
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 480px) {
+
+    .kiosk-body {
+        padding: 20px 0;
+    }
+
+    .kiosk-wrap {
+        width: 90%;
+        padding: 35px 20px;
+        border-radius: 22px;
+    }
+
+    .kiosk-wrap h1 {
+        font-size: 2rem;
+        letter-spacing: -0.8px;
+    }
+
+    .kiosk-actions {
+        margin-top: 28px;
+    }
+
+    .kiosk-wrap .btn {
+        min-height: 58px;
+        padding: 14px 18px;
+        font-size: 0.98rem;
+        border-radius: 14px;
+    }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .kiosk-wrap {
+        animation: none;
+    }
+
+    .kiosk-wrap .btn {
+        transition: none;
+    }
+}
+</style>
+{% endblock %}
+
 {% block content %}
   <div class="kiosk-wrap">
     <h1>{{ _('start_session') }}</h1>
+
     {% if patient %}
       <div class="kiosk-actions">
         <a class="btn btn-primary btn-lg" href="{{ url_for('patient.consent') }}">Consent</a>
@@ -11,6 +246,12 @@
         <a class="btn btn-primary btn-lg" href="{{ url_for('patient.review') }}">Review</a>
       </div>
     {% endif %}
-    <p><a class="btn btn-ghost btn-lg" href="{{ url_for('kiosk.kiosk') }}">{{ _('start_new_patient') }}</a></p>
+
+    <p>
+      <a class="btn btn-ghost btn-lg"
+         href="{{ url_for('kiosk.kiosk') }}">
+        {{ _('start_new_patient') }}
+      </a>
+    </p>
   </div>
 {% endblock %}

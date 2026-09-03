@@ -1,21 +1,439 @@
 {% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+
+/* =====================================================
+   REVIEW INFORMATION PAGE
+   Clean • Professional • Minimal Color
+===================================================== */
+
+.patient-shell {
+    width: min(900px, 92%);
+    margin: 45px auto 110px;
+}
+
+
+/* =====================================================
+   MAIN CONTAINER
+===================================================== */
+
+.patient-shell {
+    padding: 40px 45px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 35px rgba(15, 23, 42, 0.08);
+
+    animation: reviewFade 0.45s ease;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   PAGE TITLE
+===================================================== */
+
+.patient-shell h1 {
+    margin: 0 0 28px;
+
+    color: #1e293b;
+
+    font-size: clamp(1.9rem, 4vw, 2.5rem);
+
+    font-weight: 750;
+
+    letter-spacing: -0.8px;
+}
+
+
+/* =====================================================
+   EMERGENCY ALERT
+===================================================== */
+
+.patient-shell .flash-danger {
+    margin-bottom: 25px;
+
+    padding: 16px 18px;
+
+    background: #fef2f2;
+
+    color: #991b1b;
+
+    border: 1px solid #fecaca;
+
+    border-left: 5px solid #dc2626;
+
+    border-radius: 10px;
+
+    font-size: 0.95rem;
+
+    font-weight: 650;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   ANSWERS LIST
+===================================================== */
+
+.patient-shell > ul {
+    margin: 0 0 30px;
+
+    padding: 0;
+
+    list-style: none;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    background: #ffffff;
+}
+
+
+/* =====================================================
+   INDIVIDUAL ANSWER
+===================================================== */
+
+.patient-shell > ul > li {
+    position: relative;
+
+    padding: 17px 20px 17px 25px;
+
+    color: #475569;
+
+    font-size: 0.96rem;
+
+    line-height: 1.6;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+
+/* Remove last border */
+
+.patient-shell > ul > li:last-child {
+    border-bottom: none;
+}
+
+
+/* Small blue indicator */
+
+.patient-shell > ul > li::before {
+    content: "";
+
+    position: absolute;
+
+    left: 10px;
+
+    top: 22px;
+
+    width: 5px;
+
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #2563eb;
+}
+
+
+/* =====================================================
+   QUESTION KEY
+===================================================== */
+
+.patient-shell > ul > li strong {
+    display: inline-block;
+
+    margin-right: 5px;
+
+    color: #1e293b;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.patient-shell > ul > li:only-child {
+    color: #64748b;
+
+    text-align: center;
+
+    padding: 25px;
+}
+
+.patient-shell > ul > li:only-child::before {
+    display: none;
+}
+
+
+/* =====================================================
+   SUBMIT FORM
+===================================================== */
+
+.patient-shell form {
+    margin-top: 25px;
+
+    display: flex;
+
+    justify-content: flex-end;
+}
+
+
+/* =====================================================
+   SUBMIT BUTTON
+===================================================== */
+
+.patient-shell form .btn-primary {
+    min-width: 220px;
+
+    min-height: 54px;
+
+    padding: 14px 25px;
+
+    border: none !important;
+
+    border-radius: 11px;
+
+    background: #2563eb !important;
+
+    color: #ffffff !important;
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 18px rgba(37, 99, 235, 0.18);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.patient-shell form .btn-primary:hover {
+    background: #1d4ed8 !important;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 22px rgba(37, 99, 235, 0.25);
+}
+
+
+.patient-shell form .btn-primary:active {
+    transform: translateY(0);
+}
+
+
+/* =====================================================
+   FOCUS ACCESSIBILITY
+===================================================== */
+
+.patient-shell button:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.20);
+
+    outline-offset: 3px;
+}
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes reviewFade {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .patient-shell {
+        width: 92%;
+
+        padding: 32px 28px;
+
+        margin-top: 30px;
+
+        border-radius: 18px;
+    }
+
+    .patient-shell form {
+        justify-content: stretch;
+    }
+
+    .patient-shell form .btn-primary {
+        width: 100%;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .patient-shell {
+        width: 94%;
+
+        padding: 27px 18px;
+
+        margin: 22px auto 95px;
+
+        border-radius: 16px;
+    }
+
+    .patient-shell h1 {
+        margin-bottom: 22px;
+
+        font-size: 1.8rem;
+    }
+
+    .patient-shell > ul {
+        border-radius: 11px;
+    }
+
+    .patient-shell > ul > li {
+        padding: 15px 15px 15px 22px;
+
+        font-size: 0.91rem;
+
+        line-height: 1.5;
+    }
+
+    .patient-shell > ul > li::before {
+        left: 9px;
+
+        top: 21px;
+    }
+
+    .patient-shell > ul > li strong {
+        display: block;
+
+        margin-bottom: 3px;
+    }
+
+    .patient-shell form .btn-primary {
+        min-height: 52px;
+
+        font-size: 0.95rem;
+    }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .patient-shell {
+        animation: none;
+    }
+
+    .patient-shell button {
+        transition: none;
+    }
+
+}
+
+</style>
+{% endblock %}
+
+
 {% block content %}
+
 <div class="patient-shell">
-  <h1>{{ _('review_information') }}</h1>
+
+  <h1>
+    {{ _('review_information') }}
+  </h1>
+
+
   {% if session and session.red_flag_level == 'EMERGENCY' %}
-    <div class="flash flash-danger">{{ _('emergency_notice') }}</div>
+
+    <div class="flash flash-danger">
+      {{ _('emergency_notice') }}
+    </div>
+
   {% endif %}
+
+
   <ul>
+
     {% for a in answers %}
-      <li><strong>{{ a.question_key }}:</strong> {{ a.value or "Not reported" }}</li>
+
+      <li>
+        <strong>{{ a.question_key }}:</strong>
+        {{ a.value or "Not reported" }}
+      </li>
+
     {% else %}
+
       <li>Not reported</li>
+
     {% endfor %}
+
   </ul>
-  <form method="post" action="{{ url_for('patient.submit') }}">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <button class="btn btn-primary btn-lg" type="submit">Submit information</button>
+
+
+  <form
+    method="post"
+    action="{{ url_for('patient.submit') }}">
+
+    <input
+      type="hidden"
+      name="csrf_token"
+      value="{{ csrf_token() }}">
+
+    <button
+      class="btn btn-primary btn-lg"
+      type="submit">
+
+      Submit information
+
+    </button>
+
   </form>
+
 </div>
+
+
 {% include "components/patient_bottom_nav.html" %}
+
 {% endblock %}

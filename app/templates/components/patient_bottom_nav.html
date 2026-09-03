@@ -1,7 +1,38 @@
 <nav class="bottom-nav" aria-label="{{ _('nav_patient') }}">
-  <a href="{{ url_for('main.index') }}">{{ _('nav_home') }}</a>
-  <a href="{{ url_for('patient.dashboard') }}">{{ _('nav_dashboard') }}</a>
-  <a href="{{ url_for('patient.interview') }}">{{ _('complete_history') }}</a>
-  <a href="{{ url_for('patient.documents') }}">{{ _('upload_reports') }}</a>
-  <a href="{{ url_for('patient.profile') }}">{{ _('nav_profile') }}</a>
+
+  <a
+    href="{{ url_for('main.index') }}"
+    class="{% if request.endpoint == 'main.index' %}active{% endif %}">
+    <span class="nav-icon">⌂</span>
+    <span>{{ _('nav_home') }}</span>
+  </a>
+
+  <a
+    href="{{ url_for('patient.dashboard') }}"
+    class="{% if request.endpoint == 'patient.dashboard' %}active{% endif %}">
+    <span class="nav-icon">▦</span>
+    <span>{{ _('nav_dashboard') }}</span>
+  </a>
+
+  <a
+    href="{{ url_for('patient.interview') }}"
+    class="{% if request.endpoint == 'patient.interview' %}active{% endif %}">
+    <span class="nav-icon">☷</span>
+    <span>{{ _('complete_history') }}</span>
+  </a>
+
+  <a
+    href="{{ url_for('patient.documents') }}"
+    class="{% if request.endpoint == 'patient.documents' %}active{% endif %}">
+    <span class="nav-icon">▣</span>
+    <span>{{ _('upload_reports') }}</span>
+  </a>
+
+  <a
+    href="{{ url_for('patient.profile') }}"
+    class="{% if request.endpoint == 'patient.profile' %}active{% endif %}">
+    <span class="nav-icon">♙</span>
+    <span>{{ _('nav_profile') }}</span>
+  </a>
+
 </nav>

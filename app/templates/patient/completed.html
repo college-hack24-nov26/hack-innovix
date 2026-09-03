@@ -1,9 +1,300 @@
 {% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+
+/* =====================================================
+   THANK YOU / SUBMISSION COMPLETE PAGE
+   Clean • Professional • Minimal Color
+===================================================== */
+
+.patient-shell {
+    width: min(700px, 92%);
+
+    margin: 80px auto 110px;
+
+    padding: 55px 45px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 35px rgba(15, 23, 42, 0.08);
+
+    text-align: center;
+
+    animation: thankYouFade 0.5s ease;
+}
+
+
+/* =====================================================
+   SUCCESS ICON
+===================================================== */
+
+.patient-shell::before {
+    content: "✓";
+
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eff6ff;
+
+    border: 2px solid #bfdbfe;
+
+    color: #2563eb;
+
+    font-size: 32px;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   HEADING
+===================================================== */
+
+.patient-shell h1 {
+    margin: 0 0 16px;
+
+    color: #1e293b;
+
+    font-size: clamp(2rem, 5vw, 2.7rem);
+
+    font-weight: 750;
+
+    letter-spacing: -0.8px;
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+.patient-shell > p {
+    max-width: 520px;
+
+    margin: 0 auto 32px;
+
+    color: #64748b;
+
+    font-size: 1.05rem;
+
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   HOME / DASHBOARD BUTTON
+===================================================== */
+
+.patient-shell .btn-primary {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 210px;
+
+    min-height: 52px;
+
+    padding: 13px 25px;
+
+    box-sizing: border-box;
+
+    border: none !important;
+
+    border-radius: 11px;
+
+    background: #2563eb !important;
+
+    color: #ffffff !important;
+
+    text-decoration: none;
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 6px 18px rgba(37, 99, 235, 0.18);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.patient-shell .btn-primary:hover {
+    background: #1d4ed8 !important;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 22px rgba(37, 99, 235, 0.25);
+}
+
+
+.patient-shell .btn-primary:active {
+    transform: translateY(0);
+}
+
+
+/* =====================================================
+   FOCUS
+===================================================== */
+
+.patient-shell .btn:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.20);
+
+    outline-offset: 3px;
+}
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes thankYouFade {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .patient-shell {
+        width: 90%;
+
+        margin-top: 55px;
+
+        padding: 42px 30px;
+
+        border-radius: 18px;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .patient-shell {
+        width: 92%;
+
+        margin: 35px auto 95px;
+
+        padding: 35px 20px;
+
+        border-radius: 16px;
+    }
+
+    .patient-shell::before {
+        width: 60px;
+        height: 60px;
+
+        margin-bottom: 20px;
+
+        font-size: 27px;
+    }
+
+    .patient-shell h1 {
+        font-size: 2rem;
+
+        margin-bottom: 13px;
+    }
+
+    .patient-shell > p {
+        font-size: 0.95rem;
+
+        line-height: 1.6;
+
+        margin-bottom: 27px;
+    }
+
+    .patient-shell .btn-primary {
+        width: 100%;
+
+        min-height: 52px;
+
+        font-size: 0.95rem;
+    }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .patient-shell {
+        animation: none;
+    }
+
+    .patient-shell .btn-primary {
+        transition: none;
+    }
+
+}
+
+</style>
+{% endblock %}
+
+
 {% block content %}
+
 <div class="patient-shell">
+
   <h1>Thank you</h1>
-  <p>Your information is with the care team. Please wait to be called.</p>
-  <a class="btn btn-primary" href="{{ url_for('patient.dashboard') }}">{{ _('nav_home') }}</a>
+
+  <p>
+    Your information is with the care team.
+    Please wait to be called.
+  </p>
+
+  <a
+    class="btn btn-primary"
+    href="{{ url_for('patient.dashboard') }}">
+    {{ _('nav_home') }}
+  </a>
+
 </div>
+
+
 {% include "components/patient_bottom_nav.html" %}
+
 {% endblock %}
