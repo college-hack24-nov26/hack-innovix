@@ -1,15 +1,31 @@
-from flask import Blueprint, abort, redirect, render_template, request, url_for
+from flask import Blueprint, abort, redirect, render_template, request, send_file, url_for
 from flask_login import current_user
 
 from app.extensions import db
-from app.models import AuditLog, ClinicalSession, ClinicalSummary, Document, DoctorReview, Patient, TriageAlert
+from app.models import AuditLog, ClinicalSession, ClinicalSummary, Document, DoctorReview, Patient, TriageAlert, User
 from app.security.decorators import role_required
 from app.security.permissions import can_access_patient
 from app.services.audit_service import log_action
+from app.services.excel_service import build_workbook, login_info, sync_users_workbook
 from app.services.summary_service import generate_summary, update_summary, verify_summary
 from app.services.timeline_service import build_timeline
 
 bp = Blueprint("doctor", __name__, url_prefix="/doctor")
+
+
+@bp.route("/export/users.xlsx")
+@role_required("doctor", "admin")
+def export_users():
+    log_action(current_user.id, "export_users_excel", "user", None)
+    path = sync_users_workbook()
+    if path is None:
+        import io
+
+        buf = io.BytesIO()
+        build_workbook().save(buf)
+        buf.seek(0)
+        return send_file(buf, as_attachment=True, download_name="medikiosk_users.xlsx")
+    return send_file(path, as_attachment=True, download_name="medikiosk_users.xlsx")
 
 
 @bp.route("/dashboard")
@@ -71,9 +87,16 @@ def patients():
                 Patient.last_name.ilike(like),
                 Patient.hospital_patient_id.ilike(like),
                 Patient.abha_id.ilike(like),
+                Patient.user.has(User.email.ilike(like)),
             )
         )
-    return render_template("doctor/patients.html", patients=query.order_by(Patient.created_at.desc()).all(), q=q)
+    patients = query.order_by(Patient.created_at.desc()).all()
+    return render_template(
+        "doctor/patients.html",
+        patients=patients,
+        q=q,
+        logins=login_info([p.id for p in patients]),
+    )
 
 
 @bp.route("/queue")
@@ -99,6 +122,7 @@ def patient_view(patient_id):
         documents=patient.documents,
         items=build_timeline(patient.id),
         alerts=patient.alerts,
+        login=login_info([patient.id]).get(patient.id) if current_user.role in ("doctor", "admin") else None,
     )
 
 

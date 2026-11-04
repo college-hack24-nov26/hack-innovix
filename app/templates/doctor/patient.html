@@ -678,6 +678,21 @@
 
     </div>
 
+    {% if current_user.role in ('doctor', 'admin') %}
+    <div class="card login-info" style="margin-top:16px;padding:22px">
+      <h3 style="margin:0 0 12px;font-size:16px;color:#1f2937">Patient login information</h3>
+      {% if login %}
+        <p style="margin:6px 0"><strong>Login email:</strong> {{ login.email }}</p>
+        <p style="margin:6px 0"><strong>Account status:</strong> {{ "Active" if login.active else "Disabled" }}</p>
+        <p style="margin:6px 0"><strong>Registered:</strong> {{ login.registered.strftime("%d %b %Y, %H:%M") if login.registered else "Not available" }}</p>
+        <p style="margin:6px 0"><strong>Last login:</strong> {{ login.last_login.strftime("%d %b %Y, %H:%M") if login.last_login else "Never" }}</p>
+        <p style="margin:6px 0"><strong>Total logins:</strong> {{ login.login_count }}</p>
+      {% else %}
+        <p style="margin:6px 0;color:#6b7280">No login account is linked to this patient (record created at the kiosk or by staff).</p>
+      {% endif %}
+    </div>
+    {% endif %}
+
 
   {% elif tab == 'history' %}
 

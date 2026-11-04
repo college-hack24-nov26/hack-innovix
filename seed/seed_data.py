@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from app import create_app
 from app.extensions import db
 from app.models import LabResult, MedicalEvent, Patient, User
+from app.services.excel_service import export_path, sync_users_workbook
 
 DOCTOR_EMAIL = "dr.sharma@medikiosk.com"
 DOCTOR_PASSWORD = "Clinic@2026"
@@ -86,7 +87,9 @@ def seed():
             )
         db.session.commit()
         print("Accounts ready.")
-        print(f"Doctor login: {DOCTOR_EMAIL} / {DOCTOR_PASSWORD}")
+        sync_users_workbook()
+        print(f"Excel file: {export_path()}")
+        print(f"Doctor login: {DOCTOR_EMAIL} / {DOCTOR_PASSWORD}  (sign in at /doctor/login)")
 
 
 if __name__ == "__main__":

@@ -7,6 +7,7 @@ from wtforms.validators import DataRequired, EqualTo, Length, ValidationError
 from app.extensions import db
 from app.models import Patient, User
 from app.services.audit_service import log_action
+from app.services.excel_service import sync_users_workbook
 
 bp = Blueprint("auth", __name__)
 
@@ -43,6 +44,29 @@ class RegisterForm(FlaskForm):
     id_value = StringField("ID value")
 
 
+DEPARTMENTS = [
+    "General Medicine",
+    "Cardiology",
+    "Endocrinology",
+    "Neurology",
+    "Orthopedics",
+    "Pediatrics",
+    "Gynecology",
+    "Dermatology",
+    "ENT",
+    "Ayush",
+]
+
+
+class DoctorRegisterForm(FlaskForm):
+    full_name = StringField("Full name", validators=[DataRequired(), Length(max=160)])
+    email = StringField("Email", validators=[DataRequired(), _email_ok])
+    department = SelectField("Department", choices=[(d, d) for d in DEPARTMENTS])
+    language = SelectField("Language", choices=[("en", "English"), ("hi", "Hindi"), ("mr", "Marathi")])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
+    confirm = PasswordField("Confirm password", validators=[EqualTo("password")])
+
+
 @bp.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -61,6 +85,52 @@ def login():
             return redirect(url_for(dest))
         flash("Invalid email or password.", "danger")
     return render_template("auth/login.html", form=form)
+
+
+@bp.route("/doctor/login", methods=["GET", "POST"])
+def doctor_login():
+    if current_user.is_authenticated and current_user.role in ("doctor", "admin"):
+        return redirect(url_for("doctor.dashboard"))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data.strip().lower()).first()
+        if user and user.check_password(form.password.data) and user.is_active:
+            if user.role not in ("doctor", "admin"):
+                flash("This sign-in is for doctors. Patients should use the patient login.", "warning")
+                return render_template("auth/doctor_login.html", form=form)
+            login_user(user)
+            session["language"] = user.language or "en"
+            log_action(user.id, "login", "user", user.id)
+            return redirect(url_for("doctor.dashboard"))
+        flash("Invalid email or password.", "danger")
+    return render_template("auth/doctor_login.html", form=form)
+
+
+@bp.route("/doctor/register", methods=["GET", "POST"])
+def doctor_register():
+    form = DoctorRegisterForm()
+    if form.validate_on_submit():
+        email = form.email.data.strip().lower()
+        if User.query.filter_by(email=email).first():
+            flash("An account with that email already exists.", "warning")
+            return render_template("auth/doctor_register.html", form=form)
+        user = User(
+            email=email,
+            full_name=form.full_name.data.strip(),
+            role="doctor",
+            department=form.department.data,
+            language=form.language.data,
+        )
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        session["language"] = form.language.data
+        sync_users_workbook()
+        log_action(user.id, "register_doctor", "user", user.id)
+        log_action(user.id, "login", "user", user.id)
+        return redirect(url_for("doctor.dashboard"))
+    return render_template("auth/doctor_register.html", form=form)
 
 
 @bp.route("/register", methods=["GET", "POST"])
@@ -97,6 +167,7 @@ def register():
         db.session.commit()
         login_user(user)
         session["language"] = form.language.data
+        sync_users_workbook()
         log_action(user.id, "register", "user", user.id)
         return redirect(url_for("patient.consent"))
     return render_template("auth/register.html", form=form)

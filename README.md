@@ -28,12 +28,19 @@ Open http://127.0.0.1:5000
 
 | Role   | Email                     | Password     |
 |--------|---------------------------|--------------|
-| Patient| patient@medikiosk.local   | Patient123!  |
-| Doctor | doctor@medikiosk.local    | Doctor123!   |
-| Triage | triage@medikiosk.local    | Triage123!   |
-| Admin  | admin@medikiosk.local     | Admin123!    |
+| Patient| patient@medikiosk.com     | Patient123!  |
+| Doctor | dr.sharma@medikiosk.com   | Clinic@2026  |
+| Triage | triage@medikiosk.com      | Triage123!   |
+| Admin  | admin@medikiosk.com       | Admin123!    |
 
 New patients can also use **Register**. Consent is required before the interview.
+
+### Doctor login and registration
+
+- Doctors sign in at `/doctor/login` (linked from the home page and the top bar). Patient accounts are turned away there.
+- New doctors register at `/doctor/register` (open sign-up, no invite code).
+- In the doctor portal, **Patients** lists each patient's login email, account status and last login (searchable by email), and the patient's **Overview** tab shows registration date, last login and login count. Passwords are never shown.
+- **Excel copy of users:** every doctor/patient registration (and the seed script) rebuilds `instance/exports/medikiosk_users.xlsx` from the database, with a *Doctors* and a *Patients* sheet. Doctors can also download it from **Patients → Download Excel**. No passwords or hashes are written. Close the file in Excel before registering new users, or the update is skipped (the app logs it and carries on).
 
 ## Configuration
 

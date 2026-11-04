@@ -128,6 +128,13 @@
           {{ _('login') }}
         </a>
 
+        <!-- DOCTOR LOGIN -->
+        <a
+          class="{% if request.endpoint in ('auth.doctor_login', 'auth.doctor_register') %}is-active{% endif %}"
+          href="{{ url_for('auth.doctor_login') }}">
+          {{ _('doctor_login') }}
+        </a>
+
         <!-- REGISTER BUTTON -->
         <a
           class="btn btn-primary nav-cta"

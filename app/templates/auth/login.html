@@ -9,7 +9,13 @@
       <label>{{ form.password.label }} {{ form.password() }}</label>
       <button class="btn btn-primary" type="submit">{{ _('login') }}</button>
     </form>
-    <p><a href="{{ url_for('auth.register') }}">{{ _('register') }}</a></p>
+    <p>New patient? <a href="{{ url_for('auth.register') }}">{{ _('register') }}</a></p>
+    <hr style="border:0;border-top:1px solid #e5e7eb;margin:1.1rem 0">
+    <p style="margin:0 0 .6rem;font-weight:600">Are you a doctor?</p>
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+      <a class="btn btn-ghost" href="{{ url_for('auth.doctor_login') }}">{{ _('doctor_login') }}</a>
+      <a class="btn btn-ghost" href="{{ url_for('auth.doctor_register') }}">Doctor registration</a>
+    </div>
   </div>
 </section>
 {% endblock %}

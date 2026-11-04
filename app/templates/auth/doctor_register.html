@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-card" style="max-width:480px">
+    <h1>Doctor registration</h1>
+    <form method="post" class="form">
+      {{ form.hidden_tag() }}
+      <label>{{ form.full_name.label }} {{ form.full_name(placeholder="Dr. Full Name") }}</label>
+      <label>{{ form.email.label }} {{ form.email(autocomplete="username") }}</label>
+      <label>{{ form.department.label }} {{ form.department() }}</label>
+      <label>{{ form.language.label }} {{ form.language() }}</label>
+      <label>{{ form.password.label }} {{ form.password(autocomplete="new-password") }}</label>
+      <label>{{ form.confirm.label }} {{ form.confirm(autocomplete="new-password") }}</label>
+      {% for field in (form.password, form.confirm, form.email) %}
+        {% for err in field.errors %}<small class="field-error">{{ field.label.text }}: {{ err }}</small>{% endfor %}
+      {% endfor %}
+      <button class="btn btn-primary" type="submit">Create doctor account</button>
+    </form>
+    <p>Already registered? <a href="{{ url_for('auth.doctor_login') }}">{{ _('doctor_login') }}</a></p>
+  </div>
+</section>
+{% endblock %}
